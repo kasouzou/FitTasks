@@ -15,14 +15,19 @@ import androidx.compose.ui.unit.sp
 import com.kasouzou.fittasks.domain.model.TaskGroup
 import java.time.format.DateTimeFormatter
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TaskGroupCard(group: TaskGroup) {
+fun TaskGroupCard(
+    group: TaskGroup,
+    onClick: () -> Unit = {}
+) {
     val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp),
+        onClick = onClick,
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface

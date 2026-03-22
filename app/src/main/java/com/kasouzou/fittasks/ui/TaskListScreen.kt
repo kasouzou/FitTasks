@@ -21,6 +21,7 @@ import com.kasouzou.fittasks.ui.components.TaskGroupCard
 @Composable
 fun TaskListScreen(
     onAddTask: () -> Unit,
+    onStartTimer: (com.kasouzou.fittasks.domain.model.TaskGroup) -> Unit,
     viewModel: TaskListViewModel
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -69,7 +70,10 @@ fun TaskListScreen(
                         contentPadding = PaddingValues(top = 16.dp, bottom = 16.dp)
                     ) {
                         items(state.groups) { group ->
-                            TaskGroupCard(group = group)
+                            TaskGroupCard(
+                                group = group,
+                                onClick = { onStartTimer(group) }
+                            )
                         }
                     }
                 }

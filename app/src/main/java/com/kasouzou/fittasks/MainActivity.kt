@@ -7,11 +7,13 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.*
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kasouzou.fittasks.data.repository.FakeTaskRepository
+import com.kasouzou.fittasks.domain.model.TaskGroup
 import com.kasouzou.fittasks.domain.usecase.SaveTaskGroupUseCase
 import com.kasouzou.fittasks.ui.TaskEditScreen
 import com.kasouzou.fittasks.ui.TaskListScreen
 import com.kasouzou.fittasks.ui.TaskListViewModel
 import com.kasouzou.fittasks.ui.TaskListViewModelFactory
+import com.kasouzou.fittasks.ui.TimerScreen
 import com.kasouzou.fittasks.ui.theme.FitTasksTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -35,6 +37,7 @@ class MainActivity : ComponentActivity() {
                         )
                         TaskListScreen(
                             onAddTask = { currentScreen = Screen.TaskEdit },
+                            onStartTimer = { group -> currentScreen = Screen.Timer(group) },
                             viewModel = taskListViewModel
                         )
                     }
@@ -49,6 +52,12 @@ class MainActivity : ComponentActivity() {
                             }
                         )
                     }
+                    is Screen.Timer -> {
+                        TimerScreen(
+                            taskGroup = screen.taskGroup,
+                            onBack = { currentScreen = Screen.TaskList }
+                        )
+                    }
                 }
             }
         }
@@ -59,4 +68,5 @@ class MainActivity : ComponentActivity() {
 sealed interface Screen {
     object TaskList : Screen
     object TaskEdit : Screen
+    data class Timer(val taskGroup: TaskGroup) : Screen
 }
