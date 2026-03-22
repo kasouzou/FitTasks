@@ -2,6 +2,12 @@
 
 FitTasks is a modern Android application designed to help users manage their tasks within specific time intervals. A key feature of the app is its ability to calculate the duration allocated to each task based on a given time range (e.g., dividing 37 minutes equally among 5 tasks).
 
+## 振る舞いとルール
+- 適宜コミットする。コミットメッセージは日本語にする。
+- プッシュは絶対に行わない
+- README.mdを適宜更新する。
+- README.mdのプロジェクトツリーを適宜更新する。
+
 ## Technology Stack
 
 - **Platform:** Android
