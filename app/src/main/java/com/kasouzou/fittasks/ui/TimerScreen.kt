@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kasouzou.fittasks.domain.model.TaskGroup
 import com.kasouzou.fittasks.domain.model.TaskItem
+import com.kasouzou.fittasks.ui.components.FooterBannerAd
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,6 +50,11 @@ fun TimerScreen(
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.background
                 )
+            )
+        },
+        bottomBar = {
+            FooterBannerAd(
+                modifier = Modifier.fillMaxWidth()
             )
         }
     ) { innerPadding ->

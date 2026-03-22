@@ -21,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.kasouzou.fittasks.domain.model.TaskGroup
 import com.kasouzou.fittasks.domain.model.TaskItem
+import com.kasouzou.fittasks.ui.components.FooterBannerAd
 import com.kasouzou.fittasks.ui.theme.*
 import java.time.LocalTime
 import java.time.Duration
@@ -61,6 +62,11 @@ fun TaskEditScreen(
                         Icon(Icons.Default.ArrowBack, contentDescription = "Back")
                     }
                 }
+            )
+        },
+        bottomBar = {
+            FooterBannerAd(
+                modifier = Modifier.fillMaxWidth()
             )
         }
     ) { innerPadding ->

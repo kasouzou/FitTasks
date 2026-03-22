@@ -12,12 +12,36 @@ android {
         }
     }
 
+    val envFile = rootProject.file(".env")
+    val envVars = if (envFile.exists()) {
+        envFile.readLines()
+            .mapNotNull { line ->
+                val trimmed = line.trim()
+                if (trimmed.isEmpty() || trimmed.startsWith("#") || !trimmed.contains("=")) {
+                    null
+                } else {
+                    val parts = trimmed.split("=", limit = 2)
+                    val key = parts[0].trim()
+                    val value = parts[1].trim().removeSurrounding("\"")
+                    key to value
+                }
+            }
+            .toMap()
+    } else {
+        emptyMap()
+    }
+
     defaultConfig {
         applicationId = "com.kasouzou.fittasks"
         minSdk = 27
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
+
+        val adMobAppId = envVars["APP_ID"] ?: ""
+        val adUnitId = envVars["AD_UNIT_ID"] ?: ""
+        manifestPlaceholders["ADMOB_APP_ID"] = adMobAppId
+        buildConfigField("String", "ADMOB_BANNER_AD_UNIT_ID", "\"$adUnitId\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -37,6 +61,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
     experimentalProperties["android.kotlin.useBuiltInKotlin"] = false
@@ -53,6 +78,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material.icons.extended)
+    implementation(libs.play.services.ads)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)

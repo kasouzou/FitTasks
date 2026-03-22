@@ -14,6 +14,7 @@ import com.kasouzou.fittasks.domain.model.TaskGroup
 import com.kasouzou.fittasks.domain.usecase.SaveTaskGroupUseCase
 import com.kasouzou.fittasks.ui.*
 import com.kasouzou.fittasks.ui.theme.FitTasksTheme
+import com.google.android.gms.ads.MobileAds
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,6 +23,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        MobileAds.initialize(this)
         setContent {
             FitTasksTheme {
                 val context = LocalContext.current

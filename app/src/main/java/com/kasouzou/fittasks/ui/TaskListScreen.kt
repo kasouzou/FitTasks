@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.kasouzou.fittasks.ui.components.FooterBannerAd
 import com.kasouzou.fittasks.ui.components.TaskGroupCard
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -42,6 +43,11 @@ fun TaskListScreen(
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.background
                 )
+            )
+        },
+        bottomBar = {
+            FooterBannerAd(
+                modifier = Modifier.fillMaxWidth()
             )
         },
         floatingActionButton = {
