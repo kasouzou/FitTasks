@@ -1,14 +1,14 @@
 package com.kasouzou.fittasks.ui.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -19,45 +19,61 @@ import java.time.format.DateTimeFormatter
 fun TaskGroupCard(group: TaskGroup) {
     val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
 
-    // 外枠の青いボーダー
-    Box(
+    Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp)
-            .border(
-                width = 1.dp,
-                color = Color(0xFF64B5F6), // 薄い青
-                shape = RoundedCornerShape(12.dp)
-            )
-            .padding(16.dp)
+            .padding(vertical = 8.dp),
+        shape = RoundedCornerShape(24.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 2.dp
+        )
     ) {
         Row(
-            verticalAlignment = Alignment.Top,
-            modifier = Modifier.fillMaxWidth()
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp)
         ) {
             // 左側の時間表示エリア
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.width(80.dp)
+                modifier = Modifier.width(70.dp)
             ) {
                 // 開始時間
                 TimeBadge(time = group.startTime.format(timeFormatter))
                 
-                // タスクあたりの割り当て時間を表示
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(
-                    text = "${group.durationPerTaskMinutes} min",
-                    fontSize = 12.sp,
-                    color = Color.Gray,
-                    fontWeight = FontWeight.Light
+                // 矢印的な線
+                Box(
+                    modifier = Modifier
+                        .width(2.dp)
+                        .height(20.dp)
+                        .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.3f))
                 )
-                Spacer(modifier = Modifier.height(16.dp))
 
                 // 終了時間
                 TimeBadge(time = group.endTime.format(timeFormatter))
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // タスクあたりの割り当て時間を表示
+                Surface(
+                    color = MaterialTheme.colorScheme.secondaryContainer,
+                    shape = RoundedCornerShape(8.dp)
+                ) {
+                    Text(
+                        text = "${group.durationPerTaskMinutes}m/task",
+                        fontSize = 10.sp,
+                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+                        color = MaterialTheme.colorScheme.onSecondaryContainer,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
             }
 
-            Spacer(modifier = Modifier.width(16.dp))
+            Spacer(modifier = Modifier.width(20.dp))
 
             // 右側のタスクチップ一覧
             Column(
@@ -74,33 +90,41 @@ fun TaskGroupCard(group: TaskGroup) {
 
 @Composable
 fun TimeBadge(time: String) {
-    Box(
-        modifier = Modifier
-            .background(Color(0xFFF0F0F0), shape = RoundedCornerShape(4.dp))
-            .padding(horizontal = 8.dp, vertical = 4.dp)
+    Surface(
+        color = MaterialTheme.colorScheme.primaryContainer,
+        shape = RoundedCornerShape(12.dp)
     ) {
         Text(
             text = time,
-            fontSize = 16.sp,
-            color = Color.Black
+            fontSize = 14.sp,
+            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
+            fontWeight = FontWeight.Bold
         )
     }
 }
 
 @Composable
 fun TaskPill(title: String, color: Color) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(36.dp)
-            .background(color, shape = RoundedCornerShape(18.dp)),
-        contentAlignment = Alignment.Center
+    val contentColor = if (color.luminance() > 0.5f) Color.Black else Color.White
+    
+    Surface(
+        color = color,
+        shape = RoundedCornerShape(12.dp),
+        modifier = Modifier.fillMaxWidth(),
+        shadowElevation = 1.dp
     ) {
-        Text(
-            text = title,
-            color = Color.White,
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Bold
-        )
+        Box(
+            modifier = Modifier
+                .padding(horizontal = 12.dp, vertical = 8.dp),
+            contentAlignment = Alignment.CenterStart
+        ) {
+            Text(
+                text = title,
+                color = contentColor,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Medium
+            )
+        }
     }
 }
