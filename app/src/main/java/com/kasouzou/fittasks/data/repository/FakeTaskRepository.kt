@@ -5,6 +5,8 @@ import com.kasouzou.fittasks.domain.model.TaskItem
 import com.kasouzou.fittasks.domain.repository.TaskRepository
 import com.kasouzou.fittasks.ui.theme.*
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flowOf
 import java.time.LocalTime
 
@@ -42,15 +44,26 @@ class FakeTaskRepository : TaskRepository {
         )
     )
 
+    private val _taskGroupsFlow = MutableStateFlow(taskGroups)
+
     override fun getTaskGroups(): Flow<List<TaskGroup>> {
-        return flowOf(taskGroups)
+        return _taskGroupsFlow.asStateFlow()
     }
 
     override suspend fun saveTaskGroup(taskGroup: TaskGroup) {
-        // NotImplemented
+        val current = _taskGroupsFlow.value.toMutableList()
+        val index = current.indexOfFirst { it.startTime == taskGroup.startTime && it.endTime == taskGroup.endTime } // Simple check
+        if (index != -1) {
+            current[index] = taskGroup
+        } else {
+            current.add(taskGroup)
+        }
+        _taskGroupsFlow.value = current
     }
 
     override suspend fun deleteTaskGroup(taskGroup: TaskGroup) {
-        // NotImplemented
+        val current = _taskGroupsFlow.value.toMutableList()
+        current.remove(taskGroup)
+        _taskGroupsFlow.value = current
     }
 }

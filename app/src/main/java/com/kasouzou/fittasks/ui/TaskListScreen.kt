@@ -20,7 +20,8 @@ import com.kasouzou.fittasks.ui.components.TaskGroupCard
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TaskListScreen(
-    viewModel: TaskListViewModel = viewModel(factory = TaskListViewModelFactory())
+    onAddTask: () -> Unit,
+    viewModel: TaskListViewModel
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -42,7 +43,7 @@ fun TaskListScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { /* TODO: Add task group */ },
+                onClick = onAddTask,
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onPrimary,
                 shape = RoundedCornerShape(16.dp)
