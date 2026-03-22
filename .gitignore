@@ -1,0 +1,28 @@
+# Gradle のビルド生成物
+build/
+.gradle/
+*/build/
+
+# Android Studio の設定ファイル
+.idea/
+*.iml
+local.properties
+.navigation/
+
+# キャッシュや一時ファイル
+Captures/
+.externalNativeBuild/
+.cxx/
+*.pyc
+*.keystore
+!debug.keystore
+
+# OS固有のファイル
+.DS_Store
+Thumbs.db
+
+# ログファイル
+*.log
+
+# 秘密情報（APIキーなどがある場合）
+# secrets.properties
