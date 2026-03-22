@@ -38,6 +38,8 @@ android {
     buildFeatures {
         compose = true
     }
+
+    experimentalProperties["android.kotlin.useBuiltInKotlin"] = false
 }
 
 dependencies {
