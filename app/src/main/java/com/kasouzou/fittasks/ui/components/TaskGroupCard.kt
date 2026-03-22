@@ -13,9 +13,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kasouzou.fittasks.model.TaskGroup
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun TaskGroupCard(group: TaskGroup) {
+    val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
+
     // 外枠の青いボーダー
     Box(
         modifier = Modifier
@@ -37,13 +40,21 @@ fun TaskGroupCard(group: TaskGroup) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.width(80.dp)
             ) {
-                // スクショにあるような、いくつか時間が入るパターンを考慮
-                // 今回はシンプルにグループの開始時間を表示
-                TimeBadge(time = group.startTime)
-                Spacer(modifier = Modifier.height(32.dp))
-                if (group.tasks.size > 2) {
-                    TimeBadge(time = "14:23") // サンプルの再現用
-                }
+                // 開始時間
+                TimeBadge(time = group.startTime.format(timeFormatter))
+                
+                // タスクあたりの割り当て時間を表示
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = "${group.durationPerTaskMinutes} min",
+                    fontSize = 12.sp,
+                    color = Color.Gray,
+                    fontWeight = FontWeight.Light
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // 終了時間
+                TimeBadge(time = group.endTime.format(timeFormatter))
             }
 
             Spacer(modifier = Modifier.width(16.dp))
