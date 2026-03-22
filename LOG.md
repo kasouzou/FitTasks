@@ -8,6 +8,8 @@
 - [x] 時間計算ロジックの実装 (TaskGroup.durationPerTaskMinutes)
 - [x] UIの改善 (時間の表示、タスクあたりの時間を表示)
 - [x] リソース重複エラーの修正 (ic_launcher.png の削除)
+- [x] 生成物とローカルファイルの整理 (build ディレクトリ、local.properties、キャッシュ、DB)
+- [x] README のプロジェクトツリーとセットアップ手順を更新
 
 ### 次のステップ
 1. クリーンアーキテクチャへの移行 (Repository, UseCase の導入)

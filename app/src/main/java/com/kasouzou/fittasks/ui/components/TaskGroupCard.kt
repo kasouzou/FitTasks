@@ -12,7 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.kasouzou.fittasks.model.TaskGroup
+import com.kasouzou.fittasks.domain.model.TaskGroup
 import java.time.format.DateTimeFormatter
 
 @Composable

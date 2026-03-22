@@ -1,4 +1,4 @@
-package com.kasouzou.fittasks.model
+package com.kasouzou.fittasks.domain.model
 
 import androidx.compose.ui.graphics.Color
 import java.time.LocalTime

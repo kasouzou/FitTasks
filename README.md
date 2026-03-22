@@ -44,31 +44,38 @@
 ```text
 .
 ├── app
-│   ├── build
-│   │   ├── generated
-│   │   ├── intermediates
-│   │   ├── kotlin
-│   │   └── outputs
 │   ├── build.gradle.kts
 │   ├── proguard-rules.pro
 │   └── src
 │       ├── androidTest
 │       ├── main
-│       │   └── java
-│       │       └── com
-│       │           └── kasouzou
-│       │               └── fittasks
-│       │                   ├── MainActivity.kt
-│       │                   ├── model
-│       │                   │   └── TaskGroup.kt
-│       │                   └── ui
-│       │                       ├── TaskListScreen.kt
-│       │                       ├── components
-│       │                       │   └── TaskGroupCard.kt
-│       │                       └── theme
-│       │                           ├── Color.kt
-│       │                           ├── Theme.kt
-│       │                           └── Type.kt
+│       │   ├── AndroidManifest.xml
+│       │   ├── java
+│       │   │   └── com
+│       │   │       └── kasouzou
+│       │   │           └── fittasks
+│       │   │               ├── MainActivity.kt
+│       │   │               ├── data
+│       │   │               │   └── repository
+│       │   │               │       └── FakeTaskRepository.kt
+│       │   │               ├── domain
+│       │   │               │   ├── model
+│       │   │               │   │   └── TaskGroup.kt
+│       │   │               │   ├── repository
+│       │   │               │   │   └── TaskRepository.kt
+│       │   │               │   └── usecase
+│       │   │               │       └── GetTaskGroupsUseCase.kt
+│       │   │               └── ui
+│       │   │                   ├── TaskListScreen.kt
+│       │   │                   ├── TaskListViewModel.kt
+│       │   │                   ├── TaskListViewModelFactory.kt
+│       │   │                   ├── components
+│       │   │                   │   └── TaskGroupCard.kt
+│       │   │                   └── theme
+│       │   │                       ├── Color.kt
+│       │   │                       ├── Theme.kt
+│       │   │                       └── Type.kt
+│       │   └── res
 │       └── test
 ├── build.gradle.kts
 ├── GEMINI.md
@@ -81,14 +88,37 @@
 ├── gradle.properties
 ├── gradlew
 ├── gradlew.bat
-├── kls_database.db
-├── local.properties
+├── LOG.md
 ├── README.md
 └── settings.gradle.kts
 ```
 
 <p align="right">(<a href="#top">トップへ</a>)</p>
 
+## 開発環境構築
+
+1. Android Studio をインストールする。
+1. Android SDK を導入する。
+1. SDK パスを `local.properties` に設定する。
+
+```properties
+sdk.dir=/absolute/path/to/Android/Sdk
+```
+
+1. 依存関係を取得する。
+
+```bash
+./gradlew dependencies
+```
+
+<p align="right">(<a href="#top">トップへ</a>)</p>
+
+## トラブルシューティング
+
+- `SDK location not found.` が出る場合は `local.properties` の `sdk.dir` を確認してください。
+- ビルドキャッシュが原因の不具合が疑われる場合は `./gradlew clean` を実行してください。
+
+<p align="right">(<a href="#top">トップへ</a>)</p>
 
 
 

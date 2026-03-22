@@ -13,6 +13,7 @@ local.properties
 Captures/
 .externalNativeBuild/
 .cxx/
+.kotlin/
 *.pyc
 *.keystore
 !debug.keystore
@@ -27,3 +28,6 @@ Thumbs.db
 # 秘密情報（APIキーなどがある場合）
 # secrets.properties
 .env
+
+# ローカルDB
+*.db

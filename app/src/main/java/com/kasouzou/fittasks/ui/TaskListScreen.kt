@@ -3,54 +3,49 @@ package com.kasouzou.fittasks.ui
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.kasouzou.fittasks.model.TaskGroup
-import com.kasouzou.fittasks.model.TaskItem
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kasouzou.fittasks.ui.components.TaskGroupCard
-import java.time.LocalTime
 
 @Composable
-fun TaskListScreen() {
-    // サンプルデータ
-    val sampleData = listOf(
-        TaskGroup(
-            startTime = LocalTime.of(13, 12),
-            endTime = LocalTime.of(13, 47), // 35分間 / 4タスク = 8.75分 (切り捨てで8分)
-            tasks = listOf(
-                TaskItem("昼ごはん", Color(0xFF4285F4)),
-                TaskItem("歯磨き", Color(0xFFFBC02D)),
-                TaskItem("トイレ", Color(0xFF8BC34A)),
-                TaskItem("電気を消す", Color(0xFFE53935))
-            )
-        ),
-        // スクショの下の方にある空のラベルパターン
-        TaskGroup(
-            startTime = LocalTime.of(14, 23),
-            endTime = LocalTime.of(14, 43), // 20分間 / 4タスク = 5分
-            tasks = listOf(
-                TaskItem("", Color(0xFF4285F4)),
-                TaskItem("", Color(0xFFFBC02D)),
-                TaskItem("", Color(0xFF8BC34A)),
-                TaskItem("", Color(0xFFE53935))
-            )
-        )
-    )
+fun TaskListScreen(
+    viewModel: TaskListViewModel = viewModel(factory = TaskListViewModelFactory())
+) {
+    val uiState by viewModel.uiState.collectAsState()
 
     Scaffold(
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
-        LazyColumn(
+        Box(
             modifier = Modifier
                 .padding(innerPadding)
-                .padding(horizontal = 16.dp),
-            contentPadding = PaddingValues(top = 16.dp, bottom = 16.dp)
+                .fillMaxSize()
         ) {
-            items(sampleData) { group ->
-                TaskGroupCard(group = group)
+            when (val state = uiState) {
+                is TaskListUiState.Loading -> {
+                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                }
+                is TaskListUiState.Success -> {
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 16.dp),
+                        contentPadding = PaddingValues(top = 16.dp, bottom = 16.dp)
+                    ) {
+                        items(state.groups) { group ->
+                            TaskGroupCard(group = group)
+                        }
+                    }
+                }
+                is TaskListUiState.Error -> {
+                    // Error message
+                }
             }
         }
     }

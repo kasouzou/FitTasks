@@ -14,6 +14,7 @@ FitTasks is a modern Android application designed to help users manage their tas
 - ユーザーが直感的に操作できるようにモダンで親しみやすいかわいいデザインを心がける
 - タスク分解してタスクごとに処理を進める
 - 随時タスクの内容や実装内容を別途ファイルとして書き出しログに残す。 
+
 ## アプリのユーザーフロー
 - アプリを開く
 - 所要時間または時間範囲を指定する。
