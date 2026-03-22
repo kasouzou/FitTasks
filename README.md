@@ -56,14 +56,23 @@
 │       │   │           └── fittasks
 │       │   │               ├── MainActivity.kt
 │       │   │               ├── data
+│       │   │               │   ├── local
+│       │   │               │   │   ├── Converters.kt
+│       │   │               │   │   ├── FitTasksDatabase.kt
+│       │   │               │   │   ├── dao
+│       │   │               │   │   │   └── TaskGroupDao.kt
+│       │   │               │   │   └── entity
+│       │   │               │   │       ├── TaskGroupEntity.kt
+│       │   │               │   │       └── TaskItemEntity.kt
 │       │   │               │   └── repository
-│       │   │               │       └── FakeTaskRepository.kt
+│       │   │               │       └── RoomTaskRepository.kt
 │       │   │               ├── domain
 │       │   │               │   ├── model
 │       │   │               │   │   └── TaskGroup.kt
 │       │   │               │   ├── repository
 │       │   │               │   │   └── TaskRepository.kt
 │       │   │               │   └── usecase
+│       │   │               │       ├── DeleteTaskGroupUseCase.kt
 │       │   │               │       ├── GetTaskGroupsUseCase.kt
 │       │   │               │       └── SaveTaskGroupUseCase.kt
 │       │   │               └── ui
@@ -133,6 +142,3 @@ sdk.dir=/absolute/path/to/Android/Sdk
 - ビルドキャッシュが原因の不具合が疑われる場合は `./gradlew clean` を実行してください。
 
 <p align="right">(<a href="#top">トップへ</a>)</p>
-
-
-

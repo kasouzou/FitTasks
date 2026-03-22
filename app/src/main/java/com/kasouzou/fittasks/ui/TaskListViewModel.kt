@@ -3,6 +3,7 @@ package com.kasouzou.fittasks.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kasouzou.fittasks.domain.model.TaskGroup
+import com.kasouzou.fittasks.domain.usecase.DeleteTaskGroupUseCase
 import com.kasouzou.fittasks.domain.usecase.GetTaskGroupsUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -10,7 +11,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class TaskListViewModel(
-    private val getTaskGroupsUseCase: GetTaskGroupsUseCase
+    private val getTaskGroupsUseCase: GetTaskGroupsUseCase,
+    private val deleteTaskGroupUseCase: DeleteTaskGroupUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<TaskListUiState>(TaskListUiState.Loading)
@@ -25,6 +27,12 @@ class TaskListViewModel(
             getTaskGroupsUseCase().collect { groups ->
                 _uiState.value = TaskListUiState.Success(groups)
             }
+        }
+    }
+
+    fun deleteTaskGroup(group: TaskGroup) {
+        viewModelScope.launch {
+            deleteTaskGroupUseCase(group)
         }
     }
 }

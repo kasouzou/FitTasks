@@ -3,6 +3,9 @@ package com.kasouzou.fittasks.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,7 +22,9 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun TaskGroupCard(
     group: TaskGroup,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
+    onEdit: () -> Unit = {},
+    onDelete: () -> Unit = {}
 ) {
     val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
 
@@ -80,13 +85,40 @@ fun TaskGroupCard(
 
             Spacer(modifier = Modifier.width(20.dp))
 
-            // 右側のタスクチップ一覧
+            // 中央のタスクチップ一覧
             Column(
                 modifier = Modifier.weight(1.0f),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 group.tasks.forEach { task ->
                     TaskPill(title = task.title, color = task.color)
+                }
+            }
+
+            // 右側の操作ボタン
+            Column(
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+                modifier = Modifier.align(Alignment.Top)
+            ) {
+                IconButton(
+                    onClick = { onDelete() },
+                    modifier = Modifier.size(40.dp)
+                ) {
+                    Icon(
+                        Icons.Default.Delete,
+                        contentDescription = "Delete",
+                        tint = MaterialTheme.colorScheme.error.copy(alpha = 0.6f)
+                    )
+                }
+                IconButton(
+                    onClick = { onEdit() },
+                    modifier = Modifier.size(40.dp)
+                ) {
+                    Icon(
+                        Icons.Default.Edit,
+                        contentDescription = "Edit",
+                        tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f)
+                    )
                 }
             }
         }

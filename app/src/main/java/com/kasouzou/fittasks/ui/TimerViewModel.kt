@@ -24,7 +24,7 @@ class TimerViewModel(private val taskGroup: TaskGroup) : ViewModel() {
     private val _uiState = MutableStateFlow(
         TimerUiState(
             taskGroup = taskGroup,
-            remainingSeconds = taskGroup.durationPerTaskMinutes * 60
+            remainingSeconds = taskGroup.durationPerTaskSeconds
         )
     )
     val uiState: StateFlow<TimerUiState> = _uiState.asStateFlow()
@@ -68,7 +68,7 @@ class TimerViewModel(private val taskGroup: TaskGroup) : ViewModel() {
                 if (nextIndex < taskGroup.tasks.size) {
                     state.copy(
                         currentTaskIndex = nextIndex,
-                        remainingSeconds = taskGroup.durationPerTaskMinutes * 60
+                        remainingSeconds = taskGroup.durationPerTaskSeconds
                     )
                 } else {
                     // All tasks finished
@@ -92,7 +92,7 @@ class TimerViewModel(private val taskGroup: TaskGroup) : ViewModel() {
             if (nextIndex < taskGroup.tasks.size) {
                 state.copy(
                     currentTaskIndex = nextIndex,
-                    remainingSeconds = taskGroup.durationPerTaskMinutes * 60
+                    remainingSeconds = taskGroup.durationPerTaskSeconds
                 )
             } else {
                 state.copy(
