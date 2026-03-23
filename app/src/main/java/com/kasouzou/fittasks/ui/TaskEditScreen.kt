@@ -1,345 +1,339 @@
-package com.kasouzou.fittasks.ui
+package com.kasouzou.fittasks.ui // UI パッケージ
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.WatchLater
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import com.kasouzou.fittasks.domain.model.TaskGroup
-import com.kasouzou.fittasks.domain.model.TaskItem
-import com.kasouzou.fittasks.ui.components.FooterBannerAd
-import com.kasouzou.fittasks.ui.theme.*
-import java.time.LocalTime
-import java.time.Duration
-import java.util.Locale
+import androidx.compose.foundation.background // 背景修飾子
+import androidx.compose.foundation.clickable // クリック可能にする
+import androidx.compose.foundation.layout.* // レイアウト API
+import androidx.compose.foundation.lazy.LazyColumn // リスト
+import androidx.compose.foundation.lazy.items // アイテムリスト
+import androidx.compose.foundation.shape.CircleShape // 円形 Shape
+import androidx.compose.foundation.shape.RoundedCornerShape // 角丸 Shape
+import androidx.compose.material.icons.Icons // アイコンセット
+import androidx.compose.material.icons.filled.ArrowBack // 戻るアイコン
+import androidx.compose.material.icons.filled.Delete // 削除アイコン
+import androidx.compose.material.icons.filled.WatchLater // 時計アイコン
+import androidx.compose.material3.* // Material3 コンポーネント
+import androidx.compose.runtime.* // 状態管理
+import androidx.compose.ui.Alignment // 配置オプション
+import androidx.compose.ui.Modifier // 修飾子
+import androidx.compose.ui.draw.clip // クリップ
+import androidx.compose.ui.graphics.Color // 色
+import androidx.compose.ui.text.font.FontWeight // フォント太さ
+import androidx.compose.ui.unit.dp // dp
+import com.kasouzou.fittasks.domain.model.TaskGroup // タスクグループモデル
+import com.kasouzou.fittasks.domain.model.TaskItem // タスクアイテムモデル
+import com.kasouzou.fittasks.ui.components.FooterBannerAd // 底部広告
+import com.kasouzou.fittasks.ui.theme.* // テーマカラー
+import java.time.Duration // 時間差を扱うクラス
+import java.time.LocalTime // 時刻を表すクラス
+import java.util.Locale // ロケール
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TaskEditScreen(
-    taskGroup: TaskGroup? = null,
-    onBack: () -> Unit,
-    onSave: (TaskGroup) -> Unit
-) {
-    var startTime by remember { mutableStateOf(taskGroup?.startTime ?: LocalTime.of(9, 0)) }
-    var endTime by remember { mutableStateOf(taskGroup?.endTime ?: LocalTime.of(10, 0)) }
-    var taskName by remember { mutableStateOf("") }
+@OptIn(ExperimentalMaterial3Api::class) // Experimental API の使用を明示
+@Composable // Compose 関数宣言
+fun TaskEditScreen( // タスク追加/編集画面
+    taskGroup: TaskGroup? = null, // 編集対象のグループ（null なら新規）
+    onBack: () -> Unit, // 戻るアクション
+    onSave: (TaskGroup) -> Unit // 保存アクション
+) { // 本体
+    var startTime by remember { mutableStateOf(taskGroup?.startTime ?: LocalTime.of(9, 0)) } // 開始時間の状態
+    var endTime by remember { mutableStateOf(taskGroup?.endTime ?: LocalTime.of(10, 0)) } // 終了時間の状態
+    var taskName by remember { mutableStateOf("") } // 入力中のタスク名状態
     
-    val pastelColors = listOf(
+    val pastelColors = listOf( // 色候補リスト
         PastelPink, PastelBlue, PastelGreen, PastelYellow, PastelPurple, PastelOrange,
         SoftPink, SoftBlue
-    )
-    var selectedColor by remember { mutableStateOf(pastelColors[0]) }
+    ) // 色リスト閉じ
+    var selectedColor by remember { mutableStateOf(pastelColors[0]) } // 選択中の色
 
-    val tasks = remember { 
-        mutableStateListOf<TaskItem>().apply {
-            taskGroup?.let { addAll(it.tasks) }
-        }
-    }
+    val tasks = remember {  // タスクリストの状態
+        mutableStateListOf<TaskItem>().apply { // MutableStateList を初期化
+            taskGroup?.let { addAll(it.tasks) } // 編集時は既存タスクを追加
+        } // apply 閉じ
+    } // remember 閉じ
 
-    var showStartTimePicker by remember { mutableStateOf(false) }
-    var showEndTimePicker by remember { mutableStateOf(false) }
+    var showStartTimePicker by remember { mutableStateOf(false) } // 開始時刻ピッカー表示フラグ
+    var showEndTimePicker by remember { mutableStateOf(false) } // 終了時刻ピッカー表示フラグ
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(if (taskGroup == null) "タスク追加 ✨" else "タスク編集 ✏️", fontWeight = FontWeight.Bold) },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-                    }
-                }
-            )
-        },
-        bottomBar = {
-            FooterBannerAd(
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .padding(16.dp)
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            // Time Input Section
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
-            ) {
-                Column(
-                    modifier = Modifier.padding(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Text("時間設定", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+    Scaffold( // Scaffold レイアウト
+        topBar = { // 上部バー
+            TopAppBar( // タイトルバー
+                title = { Text(if (taskGroup == null) "タスク追加 ✨" else "タスク編集 ✏️", fontWeight = FontWeight.Bold) }, // 条件付きタイトル
+                navigationIcon = { // 戻るアイコン
+                    IconButton(onClick = onBack) { // IconButton
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Back") // 戻るアイコン
+                    } // IconButton 閉じ
+                } // navigationIcon 閉じ
+            ) // TopAppBar 閉じ
+        }, // topBar 閉じ
+        bottomBar = { // 底部広告
+            FooterBannerAd( // 底部広告表示
+                modifier = Modifier.fillMaxWidth() // 横幅いっぱい
+            ) // FooterBannerAd 閉じ
+        } // bottomBar 閉じ
+    ) { innerPadding -> // Scaffold 本体
+        Column( // 全体を縦並び
+            modifier = Modifier // 修飾子
+                .padding(innerPadding) // Scaffold の余白
+                .padding(16.dp) // 内側余白
+                .fillMaxSize(), // 全体サイズ
+            verticalArrangement = Arrangement.spacedBy(16.dp) // 縦方向の間隔
+        ) { // Column 本体
+            Card( // 時刻設定カード
+                modifier = Modifier.fillMaxWidth(), // 横幅いっぱい
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)) // 背景色
+            ) { // Card 本体
+                Column( // 縦レイアウト
+                    modifier = Modifier.padding(16.dp), // 内側余白
+                    verticalArrangement = Arrangement.spacedBy(8.dp) // 間隔
+                ) { // Column 本体
+                    Text("時間設定", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary) // セクション見出し
                     
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        // Start Time
-                        OutlinedCard(
-                            onClick = { showStartTimePicker = true },
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            Column(modifier = Modifier.padding(12.dp)) {
-                                Text("開始時間", style = MaterialTheme.typography.labelSmall)
-                                Text(startTime.toString(), style = MaterialTheme.typography.titleLarge)
-                            }
-                        }
+                    Row( // 開始/終了の横並び
+                        modifier = Modifier.fillMaxWidth(), // 横幅いっぱい
+                        horizontalArrangement = Arrangement.spacedBy(8.dp) // 横間隔
+                    ) { // Row 本体
+                        OutlinedCard( // 開始時間カード
+                            onClick = { showStartTimePicker = true }, // クリックでピッカー表示
+                            modifier = Modifier.weight(1f) // 均等幅
+                        ) { // Card 本体
+                            Column(modifier = Modifier.padding(12.dp)) { // テキストを縦並び
+                                Text("開始時間", style = MaterialTheme.typography.labelSmall) // ラベル
+                                Text(startTime.toString(), style = MaterialTheme.typography.titleLarge) // 時刻
+                            } // Column 閉じ
+                        } // OutlinedCard 閉じ
                         
-                        // End Time
-                        OutlinedCard(
-                            onClick = { showEndTimePicker = true },
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            Column(modifier = Modifier.padding(12.dp)) {
-                                Text("終了時間", style = MaterialTheme.typography.labelSmall)
-                                Text(endTime.toString(), style = MaterialTheme.typography.titleLarge)
-                            }
-                        }
-                    }
+                        OutlinedCard( // 終了時間カード
+                            onClick = { showEndTimePicker = true }, // クリックでピッカー
+                            modifier = Modifier.weight(1f) // 均等幅
+                        ) { // Card 本体
+                            Column(modifier = Modifier.padding(12.dp)) { // テキスト縦並び
+                                Text("終了時間", style = MaterialTheme.typography.labelSmall) // ラベル
+                                Text(endTime.toString(), style = MaterialTheme.typography.titleLarge) // 時刻
+                            } // Column 閉じ
+                        } // OutlinedCard 閉じ
+                    } // Row 閉じ
                     
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        // Duration Input
-                        var durationInput by remember(startTime, endTime) { 
-                            mutableStateOf(Duration.between(startTime, endTime).toMinutes().toString()) 
-                        }
+                    Row( // 所要時間表示
+                        modifier = Modifier.fillMaxWidth(), // 横幅
+                        horizontalArrangement = Arrangement.spacedBy(8.dp), // 横間隔
+                        verticalAlignment = Alignment.CenterVertically // 垂直中央揃え
+                    ) { // Row 本体
+                        var durationInput by remember(startTime, endTime) {  // 所要時間入力状態
+                            mutableStateOf(Duration.between(startTime, endTime).toMinutes().toString())  // Duration を文字列化
+                        } // remember 閉じ
                         
-                        OutlinedTextField(
-                            value = durationInput,
-                            onValueChange = { 
-                                durationInput = it
-                                it.toLongOrNull()?.let { minutes ->
-                                    if (minutes >= 0) {
-                                        endTime = startTime.plusMinutes(minutes)
-                                    }
-                                }
-                            },
-                            label = { Text("所要時間 (分)") },
-                            modifier = Modifier.weight(1f),
-                            keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(
-                                keyboardType = androidx.compose.ui.text.input.KeyboardType.Number
-                            ),
-                            singleLine = true
-                        )
+                        OutlinedTextField( // 所要時間入力欄
+                            value = durationInput, // 現在値
+                            onValueChange = {  // 変更時処理
+                                durationInput = it // 入力値を更新
+                                it.toLongOrNull()?.let { minutes -> // 数字なら
+                                    if (minutes >= 0) { // 負でなければ
+                                        endTime = startTime.plusMinutes(minutes) // 終了時間を再計算
+                                    } // if 閉じ
+                                } // let 閉じ
+                            }, // onValueChange 閉じ
+                            label = { Text("所要時間 (分)") }, // ラベル
+                            modifier = Modifier.weight(1f), // 横幅
+                            keyboardOptions = androidx.compose.foundation.text.KeyboardOptions( // 数字キーボード
+                                keyboardType = androidx.compose.ui.text.input.KeyboardType.Number // 数字限定
+                            ), // KeyboardOptions 閉じ
+                            singleLine = true // 1 行固定
+                        ) // OutlinedTextField 閉じ
                         
-                        val duration = Duration.between(startTime, endTime)
-                        val durationMinutes = duration.toMinutes()
+                        val duration = Duration.between(startTime, endTime) // Duration を再計算
+                        val durationMinutes = duration.toMinutes() // 分単位
                         
-                        Text(
-                            text = "合計: ${durationMinutes}分",
-                            style = MaterialTheme.typography.bodyMedium,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(start = 8.dp)
-                        )
-                    }
-                }
-            }
+                        Text( // 合計表示
+                            text = "合計: ${durationMinutes}分", // テキスト
+                            style = MaterialTheme.typography.bodyMedium, // フォント
+                            fontWeight = FontWeight.Bold, // 太字
+                            modifier = Modifier.padding(start = 8.dp) // 左余白
+                        ) // Text 閉じ
+                    } // Row 閉じ
+                } // Column 閉じ
+            } // Card 閉じ
 
-            // Task list input
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                Column(
-                    modifier = Modifier.padding(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    Text("タスクを追加", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+            Card( // タスク一覧カード
+                modifier = Modifier.fillMaxWidth(), // 横幅
+            ) { // Card 本体
+                Column( // 縦レイアウト
+                    modifier = Modifier.padding(16.dp), // 内側余白
+                    verticalArrangement = Arrangement.spacedBy(12.dp) // 間隔
+                ) { // Column 本体
+                    Text("タスクを追加", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary) // 見出し
                     
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        OutlinedTextField(
-                            value = taskName,
-                            onValueChange = { taskName = it },
-                            label = { Text("タスク名") },
-                            modifier = Modifier.weight(1f),
-                            singleLine = true
-                        )
-                        Button(
-                            onClick = {
-                                if (taskName.isNotBlank()) {
-                                    tasks.add(TaskItem(taskName, selectedColor))
-                                    taskName = ""
-                                }
-                            },
-                            enabled = taskName.isNotBlank(),
-                            shape = RoundedCornerShape(12.dp)
-                        ) {
-                            Text("追加")
-                        }
-                    }
+                    Row( // 入力欄と追加ボタン
+                        modifier = Modifier.fillMaxWidth(), // 横幅いっぱい
+                        verticalAlignment = Alignment.CenterVertically, // 垂直中央
+                        horizontalArrangement = Arrangement.spacedBy(8.dp) // 横間隔
+                    ) { // Row 本体
+                        OutlinedTextField( // タスク名入力
+                            value = taskName, // 入力値
+                            onValueChange = { taskName = it }, // 更新
+                            label = { Text("タスク名") }, // ラベル
+                            modifier = Modifier.weight(1f), // 横幅
+                            singleLine = true // 単一行
+                        ) // OutlinedTextField 閉じ
+                        Button( // 追加ボタン
+                            onClick = { // 押下時処理
+                                if (taskName.isNotBlank()) { // 空白でなければ
+                                    tasks.add(TaskItem(taskName, selectedColor)) // タスクを追加
+                                    taskName = "" // 文字列をクリア
+                                } // if 閉じ
+                            }, // onClick 閉じ
+                            enabled = taskName.isNotBlank(), // 入力があれば有効
+                            shape = RoundedCornerShape(12.dp) // 角丸
+                        ) { // Button 本体
+                            Text("追加") // ボタンテキスト
+                        } // Button 閉じ
+                    } // Row 閉じ
                     
-                    // Color selection
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        pastelColors.forEach { color ->
-                            Box(
-                                modifier = Modifier
-                                    .size(32.dp)
-                                    .clip(CircleShape)
-                                    .background(color)
-                                    .clickable { selectedColor = color }
-                                    .padding(2.dp)
-                            ) {
-                                if (selectedColor == color) {
-                                    Box(
-                                        modifier = Modifier
-                                            .fillMaxSize()
-                                            .clip(CircleShape)
-                                            .background(Color.Black.copy(alpha = 0.2f))
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+                    Row( // カラー選択
+                        modifier = Modifier.fillMaxWidth(), // 横幅
+                        horizontalArrangement = Arrangement.spacedBy(8.dp) // 間隔
+                    ) { // Row 本体
+                        pastelColors.forEach { color -> // 色リストをループ
+                            Box( // 色スワッチ
+                                modifier = Modifier // 修飾子
+                                    .size(32.dp) // サイズ
+                                    .clip(CircleShape) // 円形
+                                    .background(color) // 背景色
+                                    .clickable { selectedColor = color } // タップで選択
+                                    .padding(2.dp) // 内側余白
+                            ) { // Box 本体
+                                if (selectedColor == color) { // 選択中の色なら
+                                    Box( // 選択マーク
+                                        modifier = Modifier // 修飾子
+                                            .fillMaxSize() // 全体
+                                            .clip(CircleShape) // 円形
+                                            .background(Color.Black.copy(alpha = 0.2f)) // 暗い半透明
+                                    ) // 内側 Box 閉じ
+                                } // if 閉じ
+                            } // Box 閉じ
+                        } // forEach 閉じ
+                    } // Row 閉じ
+                } // Column 閉じ
+            } // Card 閉じ
 
-            Text("タスク一覧 (${tasks.size})", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text("タスク一覧 (${tasks.size})", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant) // タスク数の表示
 
-            LazyColumn(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(tasks) { task ->
-                    Surface(
-                        modifier = Modifier.fillMaxWidth(),
-                        color = task.color.copy(alpha = 0.2f),
-                        shape = MaterialTheme.shapes.medium,
-                        border = androidx.compose.foundation.BorderStroke(1.dp, task.color)
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .size(16.dp)
-                                    .clip(CircleShape)
-                                    .background(task.color)
-                            )
-                            Spacer(modifier = Modifier.width(12.dp))
-                            Text(
-                                text = task.title,
-                                modifier = Modifier.weight(1f),
-                                style = MaterialTheme.typography.bodyLarge
-                            )
-                            IconButton(onClick = { tasks.remove(task) }) {
-                                Icon(Icons.Default.Delete, contentDescription = "Remove", tint = MaterialTheme.colorScheme.error)
-                            }
-                        }
-                    }
-                }
-            }
+            LazyColumn( // タスク一覧
+                modifier = Modifier.weight(1f), // 縦方向の伸縮
+                verticalArrangement = Arrangement.spacedBy(8.dp) // 項目間隔
+            ) { // LazyColumn ブロック
+                items(tasks) { task -> // 各タスク
+                    Surface( // タスク行の背景
+                        modifier = Modifier.fillMaxWidth(), // 横幅
+                        color = task.color.copy(alpha = 0.2f), // 半透明背景
+                        shape = MaterialTheme.shapes.medium, // 形状
+                        border = androidx.compose.foundation.BorderStroke(1.dp, task.color) // 枠線
+                    ) { // Surface 本体
+                        Row( // 横並び
+                            verticalAlignment = Alignment.CenterVertically, // 中央揃え
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp) // パディング
+                        ) { // Row 本体
+                            Box( // 状態インジケーター
+                                modifier = Modifier // 修飾子
+                                    .size(16.dp) // サイズ
+                                    .clip(CircleShape) // 円形
+                                    .background(task.color) // 背景色
+                            ) // Box 閉じ
+                            Spacer(modifier = Modifier.width(12.dp)) // 間隔
+                            Text( // タスク名
+                                text = task.title, // テキスト
+                                modifier = Modifier.weight(1f), // 残り幅
+                                style = MaterialTheme.typography.bodyLarge // フォント
+                            ) // Text 閉じ
+                            IconButton(onClick = { tasks.remove(task) }) { // 削除ボタン
+                                Icon(Icons.Default.Delete, contentDescription = "Remove", tint = MaterialTheme.colorScheme.error) // 削除アイコン
+                            } // IconButton 閉じ
+                        } // Row 閉じ
+                    } // Surface 閉じ
+                } // items 閉じ
+            } // LazyColumn 閉じ
 
-            if (tasks.isNotEmpty()) {
-                val durationPerTask = if (tasks.isEmpty()) 0 else Duration.between(startTime, endTime).toMinutes() / tasks.size
-                Text(
-                    text = "1タスクあたり: 約${durationPerTask}分",
-                    style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
+            if (tasks.isNotEmpty()) { // タスクがあるときに所要時間を表示
+                val durationPerTask = if (tasks.isEmpty()) 0 else Duration.between(startTime, endTime).toMinutes() / tasks.size // 1 タスクあたりの分数
+                Text( // 平均時間表示
+                    text = "1タスクあたり: 約${durationPerTask}分", // テキスト
+                    style = MaterialTheme.typography.bodySmall, // フォント
+                    modifier = Modifier.align(Alignment.CenterHorizontally), // 中央寄せ
+                    color = MaterialTheme.colorScheme.onSurfaceVariant // 色
+                ) // Text 閉じ
+            } // if 閉じ
 
-            Button(
-                onClick = {
-                    onSave(TaskGroup(
-                        id = taskGroup?.id ?: 0,
-                        startTime = startTime,
-                        endTime = endTime,
-                        tasks = tasks.toList()
-                    ))
-                },
-                modifier = Modifier.fillMaxWidth(),
-                enabled = tasks.isNotEmpty() && Duration.between(startTime, endTime).toMinutes() > 0,
-                shape = RoundedCornerShape(16.dp)
-            ) {
-                Text("保存", style = MaterialTheme.typography.titleMedium)
-            }
-        }
-    }
+            Button( // 保存ボタン
+                onClick = { // 押下時
+                    onSave(TaskGroup( // 保存アクションを呼ぶ
+                        id = taskGroup?.id ?: 0, // 既存 ID があれば使う
+                        startTime = startTime, // 開始時間
+                        endTime = endTime, // 終了時間
+                        tasks = tasks.toList() // タスクリストをコピー
+                    )) // TaskGroup 閉じ
+                }, // onClick 閉じ
+                modifier = Modifier.fillMaxWidth(), // 横幅いっぱい
+                enabled = tasks.isNotEmpty() && Duration.between(startTime, endTime).toMinutes() > 0, // 必須条件
+                shape = RoundedCornerShape(16.dp) // 角丸
+            ) { // Button 本体
+                Text("保存", style = MaterialTheme.typography.titleMedium) // ボタンラベル
+            } // Button 閉じ
+        } // Column 閉じ
+    } // Scaffold 閉じ
 
-    if (showStartTimePicker) {
-        TimePickerDialog(
-            onDismissRequest = { showStartTimePicker = false },
-            initialTime = startTime,
-            onTimeSelected = { 
-                startTime = it
-                showStartTimePicker = false
-            }
-        )
-    }
+    if (showStartTimePicker) { // 開始時刻ピッカー表示条件
+        TimePickerDialog( // ピッカー表示
+            onDismissRequest = { showStartTimePicker = false }, // 閉じる処理
+            initialTime = startTime, // 初期時刻
+            onTimeSelected = {  // 選択時
+                startTime = it // 反映
+                showStartTimePicker = false // フラグオフ
+            } // onTimeSelected 閉じ
+        ) // TimePickerDialog 閉じ
+    } // if 閉じ
 
-    if (showEndTimePicker) {
-        TimePickerDialog(
-            onDismissRequest = { showEndTimePicker = false },
-            initialTime = endTime,
-            onTimeSelected = { 
-                endTime = it
-                showEndTimePicker = false
-            }
-        )
-    }
-}
+    if (showEndTimePicker) { // 終了ピッカー表示
+        TimePickerDialog( // ピッカー表示
+            onDismissRequest = { showEndTimePicker = false }, // 閉じる
+            initialTime = endTime, // 初期時刻
+            onTimeSelected = {  // 選択時
+                endTime = it // 反映
+                showEndTimePicker = false // フラグオフ
+            } // onTimeSelected 閉じ
+        ) // TimePickerDialog 閉じ
+    } // if 閉じ
+} // TaskEditScreen 閉じ
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TimePickerDialog(
-    onDismissRequest: () -> Unit,
-    initialTime: LocalTime,
-    onTimeSelected: (LocalTime) -> Unit
-) {
-    val timePickerState = rememberTimePickerState(
-        initialHour = initialTime.hour,
-        initialMinute = initialTime.minute,
-        is24Hour = true
-    )
+@OptIn(ExperimentalMaterial3Api::class) // Experimental API を使う
+@Composable // Compose 関数
+fun TimePickerDialog( // 時刻ピッカー用ダイアログ
+    onDismissRequest: () -> Unit, // ダイアログ閉じる処理
+    initialTime: LocalTime, // 初期時刻
+    onTimeSelected: (LocalTime) -> Unit // 時刻選択ハンドラ
+) { // 本体
+    val timePickerState = rememberTimePickerState( // ピッカーステート
+        initialHour = initialTime.hour, // 初期時間
+        initialMinute = initialTime.minute, // 初期分
+        is24Hour = true // 24 時間制
+    ) // rememberTimePickerState 閉じ
 
-    AlertDialog(
-        onDismissRequest = onDismissRequest,
-        confirmButton = {
-            TextButton(onClick = {
-                onTimeSelected(LocalTime.of(timePickerState.hour, timePickerState.minute))
-            }) {
-                Text("OK")
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismissRequest) {
-                Text("キャンセル")
-            }
-        },
-        title = { Text("時間を選択") },
-        text = {
-            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                TimePicker(state = timePickerState)
-            }
-        }
-    )
-}
+    AlertDialog( // ダイアログ
+        onDismissRequest = onDismissRequest, // 閉じる処理
+        confirmButton = { // 確定ボタン
+            TextButton(onClick = { // ボタン押下
+                onTimeSelected(LocalTime.of(timePickerState.hour, timePickerState.minute)) // 選ばれた時刻を通知
+            }) { // TextButton 本体
+                Text("OK") // テキスト
+            } // TextButton 閉じ
+        }, // confirmButton 閉じ
+        dismissButton = { // キャンセルボタン
+            TextButton(onClick = onDismissRequest) { // 押下で閉じる
+                Text("キャンセル") // テキスト
+            } // TextButton 閉じ
+        }, // dismissButton 閉じ
+        title = { Text("時間を選択") }, // タイトル
+        text = { // 本文
+            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) { // 中央配置
+                TimePicker(state = timePickerState) // タイムピッカー
+            } // Box 閉じ
+        } // text 閉じ
+    ) // AlertDialog 閉じ
+} // TimePickerDialog 閉じ

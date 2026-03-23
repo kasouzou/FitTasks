@@ -1,96 +1,99 @@
-package com.kasouzou.fittasks.ui
+package com.kasouzou.fittasks.ui // UI パッケージを明示
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.kasouzou.fittasks.ui.components.FooterBannerAd
-import com.kasouzou.fittasks.ui.components.TaskGroupCard
+import androidx.compose.foundation.layout.* // レイアウト用の Compose API
+import androidx.compose.foundation.lazy.LazyColumn // 縦スクロールリストを描くためのコンポーズ
+import androidx.compose.foundation.lazy.items // リストアイテムのループ処理
+import androidx.compose.foundation.shape.RoundedCornerShape // 角丸形状を指定する Shape
+import androidx.compose.material.icons.Icons // アイコンセット
+import androidx.compose.material.icons.filled.Add // 追加アイコン
+import androidx.compose.material3.* // Material3 コンポーネント全般
+import androidx.compose.runtime.Composable // Composable アノテーション
+import androidx.compose.runtime.collectAsState // Flow を Compose で監視するヘルパー
+import androidx.compose.runtime.getValue // By デリゲート取得
+import androidx.compose.ui.Alignment // 配置位置の定数
+import androidx.compose.ui.Modifier // Compose 用修飾子
+import androidx.compose.ui.text.font.FontWeight // フォントの太さ
+import androidx.compose.ui.unit.dp // dp 単位
+import androidx.lifecycle.viewmodel.compose.viewModel // ViewModel を Compose から取得
+import com.kasouzou.fittasks.ui.components.FooterBannerAd // 底部広告コンポーネント
+import com.kasouzou.fittasks.ui.components.TaskGroupCard // タスクカード UI
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TaskListScreen(
-    onAddTask: () -> Unit,
-    onEditTask: (com.kasouzou.fittasks.domain.model.TaskGroup) -> Unit,
-    onStartTimer: (com.kasouzou.fittasks.domain.model.TaskGroup) -> Unit,
-    onDeleteTask: (com.kasouzou.fittasks.domain.model.TaskGroup) -> Unit,
-    viewModel: TaskListViewModel
-) {
-    val uiState by viewModel.uiState.collectAsState()
+@OptIn(ExperimentalMaterial3Api::class) // Experimental API を利用することを宣言
+@Composable // この関数が Compose の描画関数であることを示す
+fun TaskListScreen( // タスクリスト画面の Composable
+    onAddTask: () -> Unit, // タスク追加アクション
+    onEditTask: (com.kasouzou.fittasks.domain.model.TaskGroup) -> Unit, // 編集アクション
+    onStartTimer: (com.kasouzou.fittasks.domain.model.TaskGroup) -> Unit, // タイマー開始アクション
+    onDeleteTask: (com.kasouzou.fittasks.domain.model.TaskGroup) -> Unit, // 削除アクション
+    viewModel: TaskListViewModel // 表示ロジックを担う ViewModel
+) { // 関数本体
+    val uiState by viewModel.uiState.collectAsState() // ViewModel の状態を Compose で監視
 
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    Text(
-                        "FitTasks ✨",
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background
-                )
-            )
-        },
-        bottomBar = {
-            FooterBannerAd(
-                modifier = Modifier.fillMaxWidth()
-            )
-        },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = onAddTask,
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary,
-                shape = RoundedCornerShape(16.dp)
-            ) {
-                Icon(Icons.Default.Add, contentDescription = "Add Task Group")
-            }
-        }
-    ) { innerPadding ->
-        Box(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize()
-        ) {
-            when (val state = uiState) {
-                is TaskListUiState.Loading -> {
-                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-                }
-                is TaskListUiState.Success -> {
-                    LazyColumn(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(horizontal = 16.dp),
-                        contentPadding = PaddingValues(top = 16.dp, bottom = 16.dp)
-                    ) {
-                        items(state.groups) { group ->
-                            TaskGroupCard(
-                                group = group,
-                                onClick = { onStartTimer(group) },
-                                onEdit = { onEditTask(group) },
-                                onDelete = { onDeleteTask(group) }
-                            )
-                        }
-                    }
-                }
-                is TaskListUiState.Error -> {
-                    // Error message
-                }
-            }
-        }
-    }
-}
+    Scaffold( // 上部/下部バーを持つ基本レイアウト
+        modifier = Modifier.fillMaxSize(), // 全面サイズ
+        topBar = { // 上部バーのラムダ
+            CenterAlignedTopAppBar( // 中央揃えのアプリバー
+                title = { // タイトル領域
+                    Text( // タイトル文字列
+                        "FitTasks ✨", // 表示テキスト
+                        fontWeight = FontWeight.Bold, // 太字
+                        color = MaterialTheme.colorScheme.primary // メインカラー
+                    ) // Text 閉じ
+                }, // title 閉じ
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors( // アプリバー色設定
+                    containerColor = MaterialTheme.colorScheme.background // 背景色をテーマから取得
+                ) // colors 閉じ
+            ) // CenterAlignedTopAppBar 閉じ
+        }, // topBar 閉じ
+        bottomBar = { // 底部広告バー
+            FooterBannerAd( // 広告を描くコンポーネント
+                modifier = Modifier.fillMaxWidth() // 横幅いっぱい
+            ) // FooterBannerAd 閉じ
+        }, // bottomBar 閉じ
+        floatingActionButton = { // FAB のラムダ
+            FloatingActionButton( // フローティングアクションボタン
+                onClick = onAddTask, // クリックでタスク追加
+                containerColor = MaterialTheme.colorScheme.primary, // 背景色
+                contentColor = MaterialTheme.colorScheme.onPrimary, // アイコン色
+                shape = RoundedCornerShape(16.dp) // 角を丸める
+            ) { // FAB 内部
+                Icon(Icons.Default.Add, contentDescription = "Add Task Group") // プラスアイコン
+            } // FloatingActionButton 閉じ
+        } // floatingActionButton 閉じ
+    ) { innerPadding -> // Scaffold 本体のコンテンツラムダ
+        Box( // 内部を包む Box
+            modifier = Modifier // Modifier チェーン
+                .padding(innerPadding) // Scaffold による内側余白
+                .fillMaxSize() // 画面全体を使う
+        ) { // Box 本体
+            when (val state = uiState) { // UI ステートで条件分岐
+                is TaskListUiState.Loading -> { // 読み込み中ステート
+                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center)) // 真ん中にローディング
+                } // Loading 閉じ
+                is TaskListUiState.Success -> { // 成功ステート
+                    LazyColumn( // タスク一覧を縦に並べる
+                        modifier = Modifier // Modifier チェーン
+                            .fillMaxSize() // 全体サイズ
+                            .padding(horizontal = 16.dp), // 横余白
+                        contentPadding = PaddingValues(top = 16.dp, bottom = 16.dp) // 上下パディング
+                    ) { // LazyColumn スコープ
+                        items(state.groups) { group -> // 各タスクグループをアイテム化
+                            TaskGroupCard( // タスクカードを描画
+                                group = group, // グループデータ
+                                onClick = { onStartTimer(group) }, // タップでタイマー画面へ
+                                onEdit = { onEditTask(group) }, // 編集アクションを伝搬
+                                onDelete = { onDeleteTask(group) } // 削除アクション
+                            ) // TaskGroupCard 閉じ
+                        } // items 閉じ
+                    } // LazyColumn 閉じ
+                } // Success 閉じ
+                is TaskListUiState.Error -> { // エラーステート
+                    Text( // エラー表示を追加しておく
+                        "エラーが発生しました", // 表示メッセージ
+                        color = MaterialTheme.colorScheme.error // エラーカラー
+                    ) // Text 閉じ
+                } // Error 閉じ
+            } // when 閉じ
+        } // Box 閉じ
+    } // Scaffold 閉じ
+} // TaskListScreen 閉じ
