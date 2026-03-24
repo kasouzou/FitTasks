@@ -60,7 +60,7 @@ fun TaskListScreen( // タスクリスト画面の Composable
                 Icon(Icons.Default.Add, contentDescription = "Add Task Group") // プラスアイコン
             } // FloatingActionButton 閉じ
         } // floatingActionButton 閉じ
-    ) { innerPadding -> // Scaffold 本体のコンテンツラムダ
+    ca-app-pub-6054307186884084/2508673133a) { innerPadding -> // Scaffold 本体のコンテンツラムダ
         Box( // 内部を包む Box
             modifier = Modifier // Modifier チェーン
                 .padding(innerPadding) // Scaffold による内側余白
