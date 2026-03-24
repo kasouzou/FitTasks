@@ -62,7 +62,7 @@ when (val screen = currentScreen) {
 }
 ```
 * **一行解説**:
-    * <a id="by"></a>[`by`](#by_ex)についての解説。
+    * <a id="by"></a>[`by`についての解説](#by_ex)
     * `mutableStateOf`: Flutter の `StatefulWidget` における `State` 変数のようなものです。この値が変わると UI が自動で書き換わります。
     * `when`: Dart の `switch` 文の強化版です。`Screen` 型（後述の `sealed interface`）の状態によって、表示する Composable 関数（Flutter の Widget に相当）を切り替えています。
 * **論理的つながり**: `currentScreen` がアプリの「現在のページ」を管理しており、各画面からのコールバック（`onAddTask` など）を受けてこの変数を書き換えることで、画面遷移を実現しています。
@@ -120,7 +120,7 @@ interface TaskRepository {
 # コード解説
 <a id="by_ex"></a>
 ## **`by`**
-[back](#by)
+[back](#by)  
 Kotlinにおける `by` は、一言で言うと**「プロパティ委譲（Property Delegation）」**という強力な機能です。
 
 Flutter（Dart）には直接対応する構文がありませんが、役割としては「変数の読み書き（ゲッター/セッター）の仕事を、別の専門家に丸投げする」というイメージです。
