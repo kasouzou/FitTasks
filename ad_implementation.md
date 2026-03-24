@@ -25,7 +25,7 @@
 ### 解説セクション
 <a id="remember_ex"></a>
 ### ** `remember` とは？ **
-[元の文章に戻る](#remember)
+[元の文章に戻る](#remember)  
 KotlinのJetpack Composeを触り始めると必ず出会うのが `remember` ですね。これは一言で言うと、**「再描画（再コンポーズ）されても値を忘れないための記憶保持機能」**です。
 
 Flutterエンジニアの方なら、**「StatefulWidgetの `State` クラスの中に変数を定義すること」**とほぼ同じ役割だと考えると一気に理解が進みます。
