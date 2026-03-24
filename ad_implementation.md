@@ -24,7 +24,7 @@
 
 ### 解説セクション
 <a id="remember_ex"></a>
-### ** `remember` とは？ **
+### **`remember` とは？**
 [元の文章に戻る](#remember)  
 KotlinのJetpack Composeを触り始めると必ず出会うのが `remember` ですね。これは一言で言うと、**「再描画（再コンポーズ）されても値を忘れないための記憶保持機能」**です。
 
