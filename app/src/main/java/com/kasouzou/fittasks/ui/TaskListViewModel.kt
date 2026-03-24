@@ -18,8 +18,7 @@ class TaskListViewModel( // タスクリスト画面の ViewModel
     private val _uiState = MutableStateFlow<TaskListUiState>(TaskListUiState.Loading) // 内部状態を初期化
     val uiState: StateFlow<TaskListUiState> = _uiState.asStateFlow() // 外部公開用読み取り専用状態
 
-    init { // 初期化処理
-        loadTaskGroups() // タスク一覧を読み込む
+    init { // 初期化処理       loadTaskGroups() // タスク一覧を読み込む
     } // init 閉じ
 
     private fun loadTaskGroups() { // タスクグループ取得

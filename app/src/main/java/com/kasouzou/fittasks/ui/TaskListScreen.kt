@@ -35,7 +35,7 @@ fun TaskListScreen( // タスクリスト画面の Composable
             CenterAlignedTopAppBar( // 中央揃えのアプリバー
                 title = { // タイトル領域
                     Text( // タイトル文字列
-                        "FitTasks ✨", // 表示テキスト
+                        "FitTasks", // 表示テキスト
                         fontWeight = FontWeight.Bold, // 太字
                         color = MaterialTheme.colorScheme.primary // メインカラー
                     ) // Text 閉じ

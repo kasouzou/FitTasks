@@ -13,7 +13,7 @@
 
 4. **FooterBannerAd の内部で広告を読み込む**
    - `FooterBannerAd.kt:18-55` はデフォルト引数で `BuildConfig.ADMOB_BANNER_AD_UNIT_ID` を受け取り、空なら描画をスキップ。
-   - `LocalConfiguration` と `AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize` で端末幅に合うサイズを計算し `remember` で保持。
+   - `LocalConfiguration` と `AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize` で端末幅に合うサイズを計算し<a id="remember"></a>[ `remember` ](#remember_ex)で保持。
    - `AdView` を `remember` して `LaunchedEffect` で `setAdSize` と `loadAd` を呼び、`DisposableEffect` で破棄時に `destroy` する。
    - 最後に `AndroidView` へ `AdView` を渡して Compose エコシステムに埋め込む。
 
@@ -21,3 +21,16 @@
    - `.env` の `AD_UNIT_ID` → `build.gradle.kts` の `buildConfigField` → `BuildConfig.ADMOB_BANNER_AD_UNIT_ID` → `FooterBannerAd` のデフォルト引数 → `AdView.adUnitId` → AdMob バナー表示。
 
 このファイルは広告の初期化、ID の注入、Compose 表示を順に追える構成になっており、`.env` の `AD_UNIT_ID` を変えれば全画面のバナー広告がそのまま切り替わります。
+
+### 解説セクション
+<a id="remember_ex"></a>
+### ** `remember` とは？ **
+[元の文章に戻る](#remember)
+nannanananan
+[元の文章に戻る](#remember)
+
+
+
+
+
+
