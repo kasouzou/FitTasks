@@ -1,0 +1,60 @@
+<resources>
+    <string name="app_name">FitTasks</string>
+    <string name="add_task_group_desc">작업 그룹 추가</string>
+    <string name="error_occurred">오류가 발생했습니다</string>
+
+    <!-- Task Edit Screen -->
+    <string name="add_task_title">작업 추가 ✨</string>
+    <string name="edit_task_title">작업 편집 ✏️</string>
+    <string name="back_desc">뒤로</string>
+    <string name="time_setting">시간 설정</string>
+    <string name="start_time">시작 시간</string>
+    <string name="end_time">종료 시간</string>
+    <string name="duration_label">소요 시간 (분)</string>
+    <string name="total_duration">합계: %d분</string>
+    <string name="add_task_section">작업 추가</string>
+    <string name="task_name_label">작업명</string>
+    <string name="add_button">추가</string>
+    <string name="task_list_count">작업 목록 (%d)</string>
+    <string name="remove_task_desc">삭제</string>
+    <string name="duration_per_task">작업당: 약 %d분</string>
+    <string name="save_button">저장</string>
+    <string name="ok_button">확인</string>
+    <string name="cancel_button">취소</string>
+    <string name="select_time_title">시간 선택</string>
+
+    <!-- Timer Screen -->
+    <string name="timer_title">타이머</string>
+    <string name="pause_desc">일시중지</string>
+    <string name="play_desc">재생</string>
+    <string name="skip_desc">건너뛰기</string>
+    <string name="great_job">수고하셨습니다!</string>
+    <string name="all_tasks_completed">모든 작업이 완료되었습니다.</string>
+    <string name="back_to_list">목록으로 돌아가기</string>
+    <string name="next_tasks">다음 작업</string>
+
+    <!-- Language Setup -->
+    <string name="welcome_message">언어를 선택해 주세요</string>
+    <string name="change_later_hint">이 설정은 나중에 설정 화면에서 변경할 수 있습니다.</string>
+    <string name="language_japanese">日本語 (일본어)</string>
+    <string name="language_english">English (영어)</string>
+    <string name="language_chinese">中文 (중국어)</string>
+    <string name="language_korean">한국어</string>
+
+    <!-- Settings -->
+    <string name="settings_title">설정</string>
+    <string name="current_language">현재 언어</string>
+    <string name="theme_setting">테마 설정</string>
+    <string name="theme_system">시스템 설정</string>
+    <string name="theme_light">라이트 모드</string>
+    <string name="theme_dark">다크 모드</string>
+    <string name="theme_dynamic">시스템 컬러</string>
+    <string name="minutes_per_task">%dm/작업</string>
+    <string name="delete_desc">삭제</string>
+    <string name="edit_desc">편집</string>
+
+    <!-- Empty State -->
+    <string name="no_tasks_title">작업이 없습니다 ✨</string>
+    <string name="no_tasks_description">첫 번째 작업 그룹을 만들고\n시간을 효율적으로 활용해 보세요!</string>
+    <string name="create_first_task">첫 번째 작업 생성</string>
+</resources>

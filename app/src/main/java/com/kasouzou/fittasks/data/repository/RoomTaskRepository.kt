@@ -9,8 +9,10 @@ import com.kasouzou.fittasks.data.local.entity.TaskItemEntity
 import com.kasouzou.fittasks.domain.model.TaskGroup
 import com.kasouzou.fittasks.domain.model.TaskItem
 import com.kasouzou.fittasks.domain.repository.TaskRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 
 class RoomTaskRepository(private val dao: TaskGroupDao) : TaskRepository {
 
@@ -20,7 +22,7 @@ class RoomTaskRepository(private val dao: TaskGroupDao) : TaskRepository {
         }
     }
 
-    override suspend fun saveTaskGroup(taskGroup: TaskGroup) {
+    override suspend fun saveTaskGroup(taskGroup: TaskGroup) = withContext(Dispatchers.IO) {
         val groupEntity = TaskGroupEntity(
             id = taskGroup.id,
             startTime = taskGroup.startTime,
@@ -36,7 +38,7 @@ class RoomTaskRepository(private val dao: TaskGroupDao) : TaskRepository {
         dao.saveTaskGroupWithItems(groupEntity, itemEntities)
     }
 
-    override suspend fun deleteTaskGroup(taskGroup: TaskGroup) {
+    override suspend fun deleteTaskGroup(taskGroup: TaskGroup) = withContext(Dispatchers.IO) {
         dao.deleteTaskGroup(
             TaskGroupEntity(
                 id = taskGroup.id,

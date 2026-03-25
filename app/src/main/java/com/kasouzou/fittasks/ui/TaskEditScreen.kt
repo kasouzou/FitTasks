@@ -17,8 +17,10 @@ import androidx.compose.ui.Alignment // 配置オプション
 import androidx.compose.ui.Modifier // 修飾子
 import androidx.compose.ui.draw.clip // クリップ
 import androidx.compose.ui.graphics.Color // 色
+import androidx.compose.ui.res.stringResource // stringResource
 import androidx.compose.ui.text.font.FontWeight // フォント太さ
 import androidx.compose.ui.unit.dp // dp
+import com.kasouzou.fittasks.R // R クラス
 import com.kasouzou.fittasks.domain.model.TaskGroup // タスクグループモデル
 import com.kasouzou.fittasks.domain.model.TaskItem // タスクアイテムモデル
 import com.kasouzou.fittasks.ui.components.FooterBannerAd // 底部広告
@@ -54,12 +56,13 @@ fun TaskEditScreen( // タスク追加/編集画面
     var showEndTimePicker by remember { mutableStateOf(false) } // 終了時刻ピッカー表示フラグ
 
     Scaffold( // Scaffold レイアウト
+        modifier = Modifier.navigationBarsPadding(),
         topBar = { // 上部バー
             TopAppBar( // タイトルバー
-                title = { Text(if (taskGroup == null) "タスク追加 ✨" else "タスク編集 ✏️", fontWeight = FontWeight.Bold) }, // 条件付きタイトル
+                title = { Text(if (taskGroup == null) stringResource(R.string.add_task_title) else stringResource(R.string.edit_task_title), fontWeight = FontWeight.Bold) }, // 条件付きタイトル
                 navigationIcon = { // 戻るアイコン
                     IconButton(onClick = onBack) { // IconButton
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back") // 戻るアイコン
+                        Icon(Icons.Default.ArrowBack, contentDescription = stringResource(R.string.back_desc)) // 戻るアイコン
                     } // IconButton 閉じ
                 } // navigationIcon 閉じ
             ) // TopAppBar 閉じ
@@ -85,7 +88,7 @@ fun TaskEditScreen( // タスク追加/編集画面
                     modifier = Modifier.padding(16.dp), // 内側余白
                     verticalArrangement = Arrangement.spacedBy(8.dp) // 間隔
                 ) { // Column 本体
-                    Text("時間設定", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary) // セクション見出し
+                    Text(stringResource(R.string.time_setting), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary) // セクション見出し
                     
                     Row( // 開始/終了の横並び
                         modifier = Modifier.fillMaxWidth(), // 横幅いっぱい
@@ -96,7 +99,7 @@ fun TaskEditScreen( // タスク追加/編集画面
                             modifier = Modifier.weight(1f) // 均等幅
                         ) { // Card 本体
                             Column(modifier = Modifier.padding(12.dp)) { // テキストを縦並び
-                                Text("開始時間", style = MaterialTheme.typography.labelSmall) // ラベル
+                                Text(stringResource(R.string.start_time), style = MaterialTheme.typography.labelSmall) // ラベル
                                 Text(startTime.toString(), style = MaterialTheme.typography.titleLarge) // 時刻
                             } // Column 閉じ
                         } // OutlinedCard 閉じ
@@ -106,7 +109,7 @@ fun TaskEditScreen( // タスク追加/編集画面
                             modifier = Modifier.weight(1f) // 均等幅
                         ) { // Card 本体
                             Column(modifier = Modifier.padding(12.dp)) { // テキスト縦並び
-                                Text("終了時間", style = MaterialTheme.typography.labelSmall) // ラベル
+                                Text(stringResource(R.string.end_time), style = MaterialTheme.typography.labelSmall) // ラベル
                                 Text(endTime.toString(), style = MaterialTheme.typography.titleLarge) // 時刻
                             } // Column 閉じ
                         } // OutlinedCard 閉じ
@@ -131,7 +134,7 @@ fun TaskEditScreen( // タスク追加/編集画面
                                     } // if 閉じ
                                 } // let 閉じ
                             }, // onValueChange 閉じ
-                            label = { Text("所要時間 (分)") }, // ラベル
+                            label = { Text(stringResource(R.string.duration_label)) }, // ラベル
                             modifier = Modifier.weight(1f), // 横幅
                             keyboardOptions = androidx.compose.foundation.text.KeyboardOptions( // 数字キーボード
                                 keyboardType = androidx.compose.ui.text.input.KeyboardType.Number // 数字限定
@@ -143,7 +146,7 @@ fun TaskEditScreen( // タスク追加/編集画面
                         val durationMinutes = duration.toMinutes() // 分単位
                         
                         Text( // 合計表示
-                            text = "合計: ${durationMinutes}分", // テキスト
+                            text = stringResource(R.string.total_duration, durationMinutes), // テキスト
                             style = MaterialTheme.typography.bodyMedium, // フォント
                             fontWeight = FontWeight.Bold, // 太字
                             modifier = Modifier.padding(start = 8.dp) // 左余白
@@ -159,7 +162,7 @@ fun TaskEditScreen( // タスク追加/編集画面
                     modifier = Modifier.padding(16.dp), // 内側余白
                     verticalArrangement = Arrangement.spacedBy(12.dp) // 間隔
                 ) { // Column 本体
-                    Text("タスクを追加", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary) // 見出し
+                    Text(stringResource(R.string.add_task_section), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary) // 見出し
                     
                     Row( // 入力欄と追加ボタン
                         modifier = Modifier.fillMaxWidth(), // 横幅いっぱい
@@ -169,7 +172,7 @@ fun TaskEditScreen( // タスク追加/編集画面
                         OutlinedTextField( // タスク名入力
                             value = taskName, // 入力値
                             onValueChange = { taskName = it }, // 更新
-                            label = { Text("タスク名") }, // ラベル
+                            label = { Text(stringResource(R.string.task_name_label)) }, // ラベル
                             modifier = Modifier.weight(1f), // 横幅
                             singleLine = true // 単一行
                         ) // OutlinedTextField 閉じ
@@ -183,7 +186,7 @@ fun TaskEditScreen( // タスク追加/編集画面
                             enabled = taskName.isNotBlank(), // 入力があれば有効
                             shape = RoundedCornerShape(12.dp) // 角丸
                         ) { // Button 本体
-                            Text("追加") // ボタンテキスト
+                            Text(stringResource(R.string.add_button)) // ボタンテキスト
                         } // Button 閉じ
                     } // Row 閉じ
                     
@@ -214,7 +217,7 @@ fun TaskEditScreen( // タスク追加/編集画面
                 } // Column 閉じ
             } // Card 閉じ
 
-            Text("タスク一覧 (${tasks.size})", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant) // タスク数の表示
+            Text(stringResource(R.string.task_list_count, tasks.size), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant) // タスク数の表示
 
             LazyColumn( // タスク一覧
                 modifier = Modifier.weight(1f), // 縦方向の伸縮
@@ -244,7 +247,7 @@ fun TaskEditScreen( // タスク追加/編集画面
                                 style = MaterialTheme.typography.bodyLarge // フォント
                             ) // Text 閉じ
                             IconButton(onClick = { tasks.remove(task) }) { // 削除ボタン
-                                Icon(Icons.Default.Delete, contentDescription = "Remove", tint = MaterialTheme.colorScheme.error) // 削除アイコン
+                                Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.remove_task_desc), tint = MaterialTheme.colorScheme.error) // 削除アイコン
                             } // IconButton 閉じ
                         } // Row 閉じ
                     } // Surface 閉じ
@@ -254,7 +257,7 @@ fun TaskEditScreen( // タスク追加/編集画面
             if (tasks.isNotEmpty()) { // タスクがあるときに所要時間を表示
                 val durationPerTask = if (tasks.isEmpty()) 0 else Duration.between(startTime, endTime).toMinutes() / tasks.size // 1 タスクあたりの分数
                 Text( // 平均時間表示
-                    text = "1タスクあたり: 約${durationPerTask}分", // テキスト
+                    text = stringResource(R.string.duration_per_task, durationPerTask), // テキスト
                     style = MaterialTheme.typography.bodySmall, // フォント
                     modifier = Modifier.align(Alignment.CenterHorizontally), // 中央寄せ
                     color = MaterialTheme.colorScheme.onSurfaceVariant // 色
@@ -274,7 +277,7 @@ fun TaskEditScreen( // タスク追加/編集画面
                 enabled = tasks.isNotEmpty() && Duration.between(startTime, endTime).toMinutes() > 0, // 必須条件
                 shape = RoundedCornerShape(16.dp) // 角丸
             ) { // Button 本体
-                Text("保存", style = MaterialTheme.typography.titleMedium) // ボタンラベル
+                Text(stringResource(R.string.save_button), style = MaterialTheme.typography.titleMedium) // ボタンラベル
             } // Button 閉じ
         } // Column 閉じ
     } // Scaffold 閉じ
@@ -321,15 +324,15 @@ fun TimePickerDialog( // 時刻ピッカー用ダイアログ
             TextButton(onClick = { // ボタン押下
                 onTimeSelected(LocalTime.of(timePickerState.hour, timePickerState.minute)) // 選ばれた時刻を通知
             }) { // TextButton 本体
-                Text("OK") // テキスト
+                Text(stringResource(R.string.ok_button)) // テキスト
             } // TextButton 閉じ
         }, // confirmButton 閉じ
         dismissButton = { // キャンセルボタン
             TextButton(onClick = onDismissRequest) { // 押下で閉じる
-                Text("キャンセル") // テキスト
+                Text(stringResource(R.string.cancel_button)) // テキスト
             } // TextButton 閉じ
         }, // dismissButton 閉じ
-        title = { Text("時間を選択") }, // タイトル
+        title = { Text(stringResource(R.string.select_time_title)) }, // タイトル
         text = { // 本文
             Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) { // 中央配置
                 TimePicker(state = timePickerState) // タイムピッカー

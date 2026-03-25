@@ -1,0 +1,60 @@
+<resources>
+    <string name="app_name">FitTasks</string>
+    <string name="add_task_group_desc">Add Task Group</string>
+    <string name="error_occurred">An error occurred</string>
+
+    <!-- Task Edit Screen -->
+    <string name="add_task_title">Add Task ✨</string>
+    <string name="edit_task_title">Edit Task ✏️</string>
+    <string name="back_desc">Back</string>
+    <string name="time_setting">Time Setting</string>
+    <string name="start_time">Start Time</string>
+    <string name="end_time">End Time</string>
+    <string name="duration_label">Duration (min)</string>
+    <string name="total_duration">Total: %d min</string>
+    <string name="add_task_section">Add Task</string>
+    <string name="task_name_label">Task Name</string>
+    <string name="add_button">Add</string>
+    <string name="task_list_count">Task List (%d)</string>
+    <string name="remove_task_desc">Remove</string>
+    <string name="duration_per_task">Per task: approx. %d min</string>
+    <string name="save_button">Save</string>
+    <string name="ok_button">OK</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="select_time_title">Select Time</string>
+
+    <!-- Timer Screen -->
+    <string name="timer_title">Timer</string>
+    <string name="pause_desc">Pause</string>
+    <string name="play_desc">Play</string>
+    <string name="skip_desc">Skip</string>
+    <string name="great_job">Great Job!</string>
+    <string name="all_tasks_completed">All tasks completed.</string>
+    <string name="back_to_list">Back to List</string>
+    <string name="next_tasks">Next Tasks</string>
+
+    <!-- Language Setup -->
+    <string name="welcome_message">Please select a language</string>
+    <string name="change_later_hint">You can change this setting later from the settings screen.</string>
+    <string name="language_japanese">日本語 (Japanese)</string>
+    <string name="language_english">English</string>
+    <string name="language_chinese">中文 (Chinese)</string>
+    <string name="language_korean">한국어 (Korean)</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="current_language">Current Language</string>
+    <string name="theme_setting">Theme Setting</string>
+    <string name="theme_system">System Default</string>
+    <string name="theme_light">Light Mode</string>
+    <string name="theme_dark">Dark Mode</string>
+    <string name="theme_dynamic">Dynamic Color</string>
+    <string name="minutes_per_task">%dm/task</string>
+    <string name="delete_desc">Delete</string>
+    <string name="edit_desc">Edit</string>
+
+    <!-- Empty State -->
+    <string name="no_tasks_title">No Tasks Yet ✨</string>
+    <string name="no_tasks_description">Create your first task group and\nmake the most of your time!</string>
+    <string name="create_first_task">Create First Task</string>
+</resources>

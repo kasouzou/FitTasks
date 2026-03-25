@@ -1,0 +1,60 @@
+<resources>
+    <string name="app_name">FitTasks</string>
+    <string name="add_task_group_desc">添加任务组</string>
+    <string name="error_occurred">发生错误</string>
+
+    <!-- Task Edit Screen -->
+    <string name="add_task_title">添加任务 ✨</string>
+    <string name="edit_task_title">编辑任务 ✏️</string>
+    <string name="back_desc">返回</string>
+    <string name="time_setting">时间设置</string>
+    <string name="start_time">开始时间</string>
+    <string name="end_time">结束时间</string>
+    <string name="duration_label">时长 (分)</string>
+    <string name="total_duration">合计: %d 分</string>
+    <string name="add_task_section">添加任务</string>
+    <string name="task_name_label">任务名称</string>
+    <string name="add_button">添加</string>
+    <string name="task_list_count">任务列表 (%d)</string>
+    <string name="remove_task_desc">删除</string>
+    <string name="duration_per_task">每个任务约: %d 分</string>
+    <string name="save_button">保存</string>
+    <string name="ok_button">确定</string>
+    <string name="cancel_button">取消</string>
+    <string name="select_time_title">选择时间</string>
+
+    <!-- Timer Screen -->
+    <string name="timer_title">计时器</string>
+    <string name="pause_desc">暂停</string>
+    <string name="play_desc">开始</string>
+    <string name="skip_desc">跳过</string>
+    <string name="great_job">干得漂亮！</string>
+    <string name="all_tasks_completed">所有任务已完成。</string>
+    <string name="back_to_list">返回列表</string>
+    <string name="next_tasks">下一个任务</string>
+
+    <!-- Language Setup -->
+    <string name="welcome_message">请选择语言</string>
+    <string name="change_later_hint">您以后可以从设置屏幕更改此设置。</string>
+    <string name="language_japanese">日本語 (日语)</string>
+    <string name="language_english">English (英语)</string>
+    <string name="language_chinese">中文</string>
+    <string name="language_korean">한국어 (韩语)</string>
+
+    <!-- Settings -->
+    <string name="settings_title">设置</string>
+    <string name="current_language">当前语言</string>
+    <string name="theme_setting">主题设置</string>
+    <string name="theme_system">系统默认</string>
+    <string name="theme_light">浅色模式</string>
+    <string name="theme_dark">深色模式</string>
+    <string name="theme_dynamic">系统色彩</string>
+    <string name="minutes_per_task">%dm/任务</string>
+    <string name="delete_desc">删除</string>
+    <string name="edit_desc">编辑</string>
+
+    <!-- Empty State -->
+    <string name="no_tasks_title">还没有任务 ✨</string>
+    <string name="no_tasks_description">创建您的第一个任务组，\n充分利用您的时间！</string>
+    <string name="create_first_task">创建第一个任务</string>
+</resources>

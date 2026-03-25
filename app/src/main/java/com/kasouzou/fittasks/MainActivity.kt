@@ -1,98 +1,203 @@
-package com.kasouzou.fittasks // このファイルが属するパッケージを定義
+package com.kasouzou.fittasks
 
-import android.os.Bundle // Android の画面状態を保持する Bundle クラスをインポート
-import androidx.activity.ComponentActivity // Compose と連携するベースアクティビティの継承元
-import androidx.activity.compose.setContent // Compose の UI をアクティビティに設定する関数
-import androidx.activity.enableEdgeToEdge // 画面のエッジまで描画するための補助関数
-import androidx.compose.runtime.* // remember や state を使うための Compose ライブラリ
-import androidx.compose.ui.platform.LocalContext // Compose でコンテキストを取得するためのプロバイダ
-import androidx.lifecycle.viewmodel.compose.viewModel // Compose から ViewModel を取得する関数
-import androidx.room.Room // Room データベースビルダーを使うためのクラス
-import com.google.android.gms.ads.MobileAds // AdMob 初期化用
-import com.kasouzou.fittasks.data.local.FitTasksDatabase // ローカルデータベース定義を読み込む
-import com.kasouzou.fittasks.data.repository.RoomTaskRepository // Room を使ったリポジトリ実装
-import com.kasouzou.fittasks.domain.model.TaskGroup // タスクグループのドメインモデル
-import com.kasouzou.fittasks.domain.usecase.SaveTaskGroupUseCase // タスク保存ユースケース
-import com.kasouzou.fittasks.ui.* // UI 関連の画面やコンポーネントをまとめてインポート
-import com.kasouzou.fittasks.ui.theme.FitTasksTheme // アプリの共通テーマ
-import kotlinx.coroutines.CoroutineScope // Compose 内でコルーチンを構築するためのスコープ
-import kotlinx.coroutines.Dispatchers // コルーチンのディスパッチャーを指定するためのオブジェクト
-import kotlinx.coroutines.launch // コルーチン起動用の launch 関数
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.core.os.LocaleListCompat
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
+import androidx.room.Room
+import com.google.android.gms.ads.MobileAds
+import com.kasouzou.fittasks.data.local.FitTasksDatabase
+import com.kasouzou.fittasks.data.repository.DataStorePreferenceRepository
+import com.kasouzou.fittasks.data.repository.RoomTaskRepository
+import com.kasouzou.fittasks.domain.model.TaskGroup
+import com.kasouzou.fittasks.domain.usecase.*
+import com.kasouzou.fittasks.ui.*
+import com.kasouzou.fittasks.ui.theme.FitTasksTheme
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
 
-class MainActivity : ComponentActivity() { // ComponentActivity を継承したエントリポイント
-    override fun onCreate(savedInstanceState: Bundle?) { // ライフサイクルの onCreate をオーバーライド
-        super.onCreate(savedInstanceState) // 親クラスの onCreate を呼んで標準処理を実行
-        enableEdgeToEdge() // ステータスバー・ナビバーまで描画領域を広げる
-        MobileAds.initialize(this) // AdMob を初期化して広告を利用可能にする
-        setContent { // Compose で画面内容をセット
-            FitTasksTheme { // 共通テーマでラッピング
-                val context = LocalContext.current // Compose から現在の Context を取り出す
-                val database = remember {
-                    Room.databaseBuilder(context, FitTasksDatabase::class.java, "fittasks-db")
-                            .build()
-                } // データベースは Compose の再コンポジションでも保持しつつ構築
-                val repository = remember {
-                    RoomTaskRepository(database.taskGroupDao())
-                } // Dao を渡してリポジトリを生成
-                val saveTaskGroupUseCase = remember {
-                    SaveTaskGroupUseCase(repository)
-                } // タスク保存ユースケースを構築
+@Serializable
+sealed interface Route {
+    @Serializable
+    object LanguageSetup : Route
+    @Serializable
+    object TaskList : Route
+    @Serializable
+    data class TaskEdit(val taskGroupId: Long? = null) : Route
+    @Serializable
+    data class Timer(val taskGroupId: Long) : Route
+    @Serializable
+    object Settings : Route
+}
 
-                var currentScreen by remember {
-                    mutableStateOf<Screen>(Screen.TaskList)
-                } // 表示中画面を状態として保持
+class MainActivity : AppCompatActivity() {
+    
+    private lateinit var database: FitTasksDatabase
+    private lateinit var taskRepository: RoomTaskRepository
+    private lateinit var prefRepository: DataStorePreferenceRepository
+    private lateinit var saveTaskGroupUseCase: SaveTaskGroupUseCase
+    private lateinit var getTaskGroupsUseCase: GetTaskGroupsUseCase
 
-                when (val screen = currentScreen) { // 現在表示すべき画面を判定
-                    is Screen.TaskList -> { // タスクリスト画面を表示
-                        val taskListViewModel: TaskListViewModel =
-                                viewModel( // Compose から ViewModel を取得TaskGroup
-                                        factory =
-                                                TaskListViewModelFactory(
-                                                        repository
-                                                ) // リポジトリを渡したファクトリを使う
-                                )
-                        TaskListScreen( // タスクリスト Composable を描画
-                                onAddTask = {
-                                    currentScreen = Screen.TaskEdit(null)
-                                }, // タスク追加ボタンで編集画面へ遷移
-                                onEditTask = { group ->
-                                    currentScreen = Screen.TaskEdit(group)
-                                }, // 編集リクエストで選択グループを渡す
-                                onStartTimer = { group ->
-                                    currentScreen = Screen.Timer(group)
-                                }, // タイマー起動で Timer 画面へ
-                                onDeleteTask = { group ->
-                                    taskListViewModel.deleteTaskGroup(group)
-                                }, // 削除は ViewModel に任せる
-                                viewModel = taskListViewModel // 取得した ViewModel を渡す
-                        )
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        MobileAds.initialize(this)
+
+        database = Room.databaseBuilder(applicationContext, FitTasksDatabase::class.java, "fittasks-db")
+            .build()
+        taskRepository = RoomTaskRepository(database.taskGroupDao())
+        prefRepository = DataStorePreferenceRepository(applicationContext)
+        saveTaskGroupUseCase = SaveTaskGroupUseCase(taskRepository)
+        getTaskGroupsUseCase = GetTaskGroupsUseCase(taskRepository)
+        
+        setContent {
+            val prefViewModel: PreferenceViewModel = viewModel(
+                factory = PreferenceViewModelFactory(
+                    GetLanguageUseCase(prefRepository),
+                    SaveLanguageUseCase(prefRepository),
+                    GetThemeModeUseCase(prefRepository),
+                    SaveThemeModeUseCase(prefRepository),
+                    GetDynamicColorUseCase(prefRepository),
+                    SaveDynamicColorUseCase(prefRepository),
+                    IsFirstLaunchUseCase(prefRepository),
+                    SetFirstLaunchCompletedUseCase(prefRepository)
+                )
+            )
+
+            val prefState by prefViewModel.uiState.collectAsState()
+
+            val darkTheme = when (prefState.themeMode) {
+                1 -> false
+                2 -> true
+                else -> isSystemInDarkTheme()
+            }
+
+            FitTasksTheme(darkTheme = darkTheme, dynamicColor = prefState.useDynamicColor) {
+                // 言語設定の反映
+                LaunchedEffect(prefState.language) {
+                    prefState.language?.let { code ->
+                        val currentLocales = AppCompatDelegate.getApplicationLocales()
+                        if (currentLocales.toLanguageTags() != code) {
+                            val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags(code)
+                            AppCompatDelegate.setApplicationLocales(appLocale)
+                        }
                     }
-                    is Screen.TaskEdit -> { // 新規・編集画面
-                        TaskEditScreen( // 新規/既存グループで編集画面を表示
-                                taskGroup = screen.taskGroup, // 編集対象のグループ
-                                onBack = { currentScreen = Screen.TaskList }, // 戻るボタンでリスト画面へ
-                                onSave = { group -> // 保存時に usecase を通す
-                                    CoroutineScope(Dispatchers.Main).launch { // UI スレッドでコルーチンを立ち上げ
-                                        saveTaskGroupUseCase(group) // データ保存を実行
-                                        currentScreen = Screen.TaskList // 保存後にリストへ戻す
+                }
+
+                if (!prefState.isLoaded) {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        CircularProgressIndicator()
+                    }
+                } else {
+                    val navController = rememberNavController()
+                    
+                    NavHost(
+                        navController = navController,
+                        startDestination = if (prefState.isFirstLaunch == true) Route.LanguageSetup else Route.TaskList
+                    ) {
+                        composable<Route.LanguageSetup> {
+                            LanguageSelectionScreen(
+                                onLanguageSelected = { code ->
+                                    prefViewModel.setLanguage(code)
+                                    prefViewModel.completeFirstLaunch()
+                                    navController.navigate(Route.TaskList) {
+                                        popUpTo(Route.LanguageSetup) { inclusive = true }
                                     }
                                 }
-                        )
-                    }
-                    is Screen.Timer -> { // タイマー画面
-                        TimerScreen( // タイマー画面を表示
-                                taskGroup = screen.taskGroup, // Timer に表示対象を渡す
-                                onBack = { currentScreen = Screen.TaskList } // 戻るとリスト画面へ
-                        )
+                            )
+                        }
+                        
+                        composable<Route.TaskList> {
+                            val taskListViewModel: TaskListViewModel = viewModel(
+                                factory = TaskListViewModelFactory(taskRepository)
+                            )
+                            TaskListScreen(
+                                onAddTask = {
+                                    navController.navigate(Route.TaskEdit())
+                                },
+                                onEditTask = { group ->
+                                    navController.navigate(Route.TaskEdit(group.id))
+                                },
+                                onStartTimer = { group ->
+                                    navController.navigate(Route.Timer(group.id))
+                                },
+                                onDeleteTask = { group ->
+                                    taskListViewModel.deleteTaskGroup(group)
+                                },
+                                onSettingsClick = {
+                                    navController.navigate(Route.Settings)
+                                },
+                                viewModel = taskListViewModel
+                            )
+                        }
+                        
+                        composable<Route.TaskEdit> { backStackEntry ->
+                            val route: Route.TaskEdit = backStackEntry.toRoute()
+                            val groups by getTaskGroupsUseCase().collectAsState(initial = emptyList())
+                            val taskGroup = groups.find { it.id == route.taskGroupId }
+                            
+                            TaskEditScreen(
+                                taskGroup = taskGroup,
+                                onBack = { navController.popBackStack() },
+                                onSave = { group ->
+                                    CoroutineScope(Dispatchers.Main).launch {
+                                        saveTaskGroupUseCase(group)
+                                        navController.popBackStack()
+                                    }
+                                }
+                            )
+                        }
+                        
+                        composable<Route.Timer> { backStackEntry ->
+                            val route: Route.Timer = backStackEntry.toRoute()
+                            val groups by getTaskGroupsUseCase().collectAsState(initial = emptyList())
+                            val taskGroup = groups.find { it.id == route.taskGroupId }
+                            
+                            if (taskGroup != null) {
+                                TimerScreen(
+                                    taskGroup = taskGroup,
+                                    onBack = { navController.popBackStack() }
+                                )
+                            }
+                        }
+                        
+                        composable<Route.Settings> {
+                            SettingsScreen(
+                                onBack = { navController.popBackStack() },
+                                onLanguageSelected = { code ->
+                                    prefViewModel.setLanguage(code)
+                                },
+                                currentLanguageCode = prefState.language,
+                                onThemeSelected = { mode ->
+                                    prefViewModel.setThemeMode(mode)
+                                },
+                                currentThemeMode = prefState.themeMode,
+                                onDynamicColorChanged = { enabled ->
+                                    prefViewModel.setDynamicColor(enabled)
+                                },
+                                useDynamicColor = prefState.useDynamicColor
+                            )
+                        }
                     }
                 }
             }
         }
     }
-}
-
-sealed interface Screen { // 画面遷移の状態を定義するシールドインターフェース
-    object TaskList : Screen // リスト画面を表すシングルトンオブジェクト
-    data class TaskEdit(val taskGroup: TaskGroup?) : Screen // 編集画面用データクラス
-    data class Timer(val taskGroup: TaskGroup) : Screen // タイマー画面用データクラス
 }

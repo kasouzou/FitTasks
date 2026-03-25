@@ -21,9 +21,11 @@ import androidx.compose.ui.Modifier // 修飾子
 import androidx.compose.ui.draw.clip // クリップ修飾子
 import androidx.compose.ui.graphics.Color // 色定義
 import androidx.compose.ui.graphics.luminance // 色の明るさを調べる
+import androidx.compose.ui.res.stringResource // stringResource
 import androidx.compose.ui.text.font.FontWeight // フォント設定
 import androidx.compose.ui.unit.dp // dp 単位
 import androidx.compose.ui.unit.sp // sp 単位
+import com.kasouzou.fittasks.R // R クラス
 import com.kasouzou.fittasks.domain.model.TaskGroup // タスクグループモデル
 import com.kasouzou.fittasks.domain.model.TaskItem // 個別タスクモデル
 import com.kasouzou.fittasks.ui.components.FooterBannerAd // 底部広告
@@ -39,12 +41,13 @@ fun TimerScreen( // タイマー画面の Composable
     val uiState by viewModel.uiState.collectAsState() // UI 状態を監視
 
     Scaffold( // 上下バー付きレイアウト
+        modifier = Modifier.navigationBarsPadding(),
         topBar = { // 上部バー
             TopAppBar( // 通常の AppBar
-                title = { Text("Timer", fontWeight = FontWeight.Bold) }, // タイトル
+                title = { Text(stringResource(R.string.timer_title), fontWeight = FontWeight.Bold) }, // タイトル
                 navigationIcon = { // ナビゲーションアイコン
                     IconButton(onClick = onBack) { // 戻るボタン
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back") // 戻るアイコン
+                        Icon(Icons.Default.ArrowBack, contentDescription = stringResource(R.string.back_desc)) // 戻るアイコン
                     } // IconButton 閉じ
                 }, // navigationIcon 閉じ
                 colors = TopAppBarDefaults.topAppBarColors( // 色設定
@@ -92,7 +95,7 @@ fun TimerScreen( // タイマー画面の Composable
             Spacer(modifier = Modifier.height(48.dp)) // さらに間隔
 
             Text( // 次のタスク見出し
-                text = "Next Tasks", // 見出しテキスト
+                text = stringResource(R.string.next_tasks), // 見出しテキスト
                 style = MaterialTheme.typography.labelLarge, // ラベルスタイル
                 modifier = Modifier.align(Alignment.Start), // 左寄せ
                 color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f) // 半透明
@@ -182,7 +185,7 @@ fun TimerDisplay( // タイマー中央の表示部
             ) { // FAB 本体
                 Icon( // 再生/一時停止アイコン
                     if (isRunning) Icons.Default.Pause else Icons.Default.PlayArrow, // 状態に応じたアイコン
-                    contentDescription = if (isRunning) "Pause" else "Play", // アクセシビリティ説明
+                    contentDescription = if (isRunning) stringResource(R.string.pause_desc) else stringResource(R.string.play_desc), // アクセシビリティ説明
                     modifier = Modifier.size(36.dp) // アイコンサイズ
                 ) // Icon 閉じ
             } // FloatingActionButton 閉じ
@@ -193,7 +196,7 @@ fun TimerDisplay( // タイマー中央の表示部
                     .size(56.dp) // サイズ
                     .background(MaterialTheme.colorScheme.surfaceVariant, CircleShape) // 背景と形状
             ) { // IconButton 本体
-                Icon(Icons.Default.SkipNext, contentDescription = "Skip") // スキップアイコン
+                Icon(Icons.Default.SkipNext, contentDescription = stringResource(R.string.skip_desc)) // スキップアイコン
             } // IconButton 閉じ
         } // Row 閉じ
     } // Column 閉じ
@@ -213,18 +216,18 @@ fun FinishedDisplay(onBack: () -> Unit) { // 終了表示
             modifier = Modifier.size(120.dp) // サイズ
         ) // Icon 閉じ
         Text( // 成功メッセージ
-            "Great Job!", // テキスト
+            stringResource(R.string.great_job), // テキスト
             style = MaterialTheme.typography.headlineMedium, // フォント
             fontWeight = FontWeight.Bold // 太字
         ) // Text 閉じ
         Text( // サブテキスト
-            "All tasks completed.", // テキスト
+            stringResource(R.string.all_tasks_completed), // テキスト
             style = MaterialTheme.typography.bodyLarge, // フォント
             color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f) // 半透明
         ) // Text 閉じ
         Spacer(modifier = Modifier.height(40.dp)) // 間隔
         Button(onClick = onBack) { // 戻るボタン
-            Text("Back to List") // テキスト
+            Text(stringResource(R.string.back_to_list)) // テキスト
         } // Button 閉じ
     } // Column 閉じ
 } // FinishedDisplay 閉じ

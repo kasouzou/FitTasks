@@ -31,3 +31,6 @@ Thumbs.db
 
 # ローカルDB
 *.db
+
+.gemini/
+gha-creds-*.json

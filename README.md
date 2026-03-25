@@ -14,9 +14,10 @@
 
 1. [概要](#概要)
 2. [環境](#環境)
-3. [ディレクトリ構成](#ディレクトリ構成)
-4. [開発環境構築](#開発環境構築)
-5. [トラブルシューティング](#トラブルシューティング)
+3. [機能](#機能)
+4. [ディレクトリ構成](#ディレクトリ構成)
+5. [開発環境構築](#開発環境構築)
+6. [トラブルシューティング](#トラブルシューティング)
 
 <!-- プロジェクトについて -->
 
@@ -35,6 +36,16 @@
 | Android Gradle Plugin | 9.1.0      |
 | Minimum SDK           | 27         |
 | Target SDK            | 36         |
+
+<p align="right">(<a href="#top">トップへ</a>)</p>
+
+## 機能
+
+- **タスク管理**: タスクグループ（開始・終了時間、タスクリスト）の作成・編集・削除
+- **自動時間配分**: 指定した時間範囲をタスク数で均等に分割
+- **自動進行タイマー**: 各タスクの持ち時間を計測し、自動で次のタスクへ遷移
+- **多言語対応**: 日本語、英語、中国語（簡体字）、韓国語に対応。初回起動時の言語選択および設定画面からの変更が可能
+- **広告表示**: AdMobによるバナー広告表示
 
 <p align="right">(<a href="#top">トップへ</a>)</p>
 
@@ -65,17 +76,23 @@
 │       │   │               │   │       ├── TaskGroupEntity.kt
 │       │   │               │   │       └── TaskItemEntity.kt
 │       │   │               │   └── repository
+│       │   │               │       ├── DataStorePreferenceRepository.kt
 │       │   │               │       └── RoomTaskRepository.kt
 │       │   │               ├── domain
 │       │   │               │   ├── model
 │       │   │               │   │   └── TaskGroup.kt
 │       │   │               │   ├── repository
+│       │   │               │   │   ├── PreferenceRepository.kt
 │       │   │               │   │   └── TaskRepository.kt
 │       │   │               │   └── usecase
 │       │   │               │       ├── DeleteTaskGroupUseCase.kt
 │       │   │               │       ├── GetTaskGroupsUseCase.kt
+│       │   │               │       ├── LanguageUseCases.kt
 │       │   │               │       └── SaveTaskGroupUseCase.kt
 │       │   │               └── ui
+│       │   │                   ├── LanguageSelectionScreen.kt
+│       │   │                   ├── PreferenceViewModel.kt
+│       │   │                   ├── SettingsScreen.kt
 │       │   │                   ├── TaskEditScreen.kt
 │       │   │                   ├── TaskListScreen.kt
 │       │   │                   ├── TaskListViewModel.kt
@@ -90,6 +107,10 @@
 │       │   │                       ├── Theme.kt
 │       │   │                       └── Type.kt
 │       │   └── res
+│       │       ├── values
+│       │       ├── values-en
+│       │       ├── values-ko
+│       │       └── values-zh-rCN
 │       └── test
 │           └── java
 │               └── com

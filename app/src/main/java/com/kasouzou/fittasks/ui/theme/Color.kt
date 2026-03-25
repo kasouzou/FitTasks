@@ -24,3 +24,7 @@ val SoftPinkDark = Color(0xFFC48B9F)
 val SoftPinkLight = Color(0xFFFFF1F5)
 val SoftBlue = Color(0xFFB3E5FC)
 val SoftBlueDark = Color(0xFF82B1FF)
+
+// 自分で定義タスクグループカードのダークモード時の背景色
+val DeepGrey = Color(0xFF3E3E3E)
+

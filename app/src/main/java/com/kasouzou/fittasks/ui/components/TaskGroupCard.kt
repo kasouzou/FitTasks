@@ -12,9 +12,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.kasouzou.fittasks.R
 import com.kasouzou.fittasks.domain.model.TaskGroup
 import java.time.format.DateTimeFormatter
 
@@ -74,7 +76,7 @@ fun TaskGroupCard(
                     shape = RoundedCornerShape(8.dp)
                 ) {
                     Text(
-                        text = "${group.durationPerTaskMinutes}m/task",
+                        text = stringResource(R.string.minutes_per_task, group.durationPerTaskMinutes),
                         fontSize = 10.sp,
                         modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
                         color = MaterialTheme.colorScheme.onSecondaryContainer,
@@ -106,7 +108,7 @@ fun TaskGroupCard(
                 ) {
                     Icon(
                         Icons.Default.Delete,
-                        contentDescription = "Delete",
+                        contentDescription = stringResource(R.string.delete_desc),
                         tint = MaterialTheme.colorScheme.error.copy(alpha = 0.6f)
                     )
                 }
@@ -116,7 +118,7 @@ fun TaskGroupCard(
                 ) {
                     Icon(
                         Icons.Default.Edit,
-                        contentDescription = "Edit",
+                        contentDescription = stringResource(R.string.edit_desc),
                         tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f)
                     )
                 }

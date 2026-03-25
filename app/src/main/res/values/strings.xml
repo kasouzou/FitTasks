@@ -1,3 +1,60 @@
 <resources>
     <string name="app_name">FitTasks</string>
+    <string name="add_task_group_desc">タスクグループを追加</string>
+    <string name="error_occurred">エラーが発生しました</string>
+
+    <!-- Task Edit Screen -->
+    <string name="add_task_title">タスク追加 ✨</string>
+    <string name="edit_task_title">タスク編集 ✏️</string>
+    <string name="back_desc">戻る</string>
+    <string name="time_setting">時間設定</string>
+    <string name="start_time">開始時間</string>
+    <string name="end_time">終了時間</string>
+    <string name="duration_label">所要時間 (分)</string>
+    <string name="total_duration">合計: %d分</string>
+    <string name="add_task_section">タスクを追加</string>
+    <string name="task_name_label">タスク名</string>
+    <string name="add_button">追加</string>
+    <string name="task_list_count">タスク一覧 (%d)</string>
+    <string name="remove_task_desc">削除</string>
+    <string name="duration_per_task">1タスクあたり: 約%d分</string>
+    <string name="save_button">保存</string>
+    <string name="ok_button">OK</string>
+    <string name="cancel_button">キャンセル</string>
+    <string name="select_time_title">時間を選択</string>
+
+    <!-- Timer Screen -->
+    <string name="timer_title">タイマー</string>
+    <string name="pause_desc">一時停止</string>
+    <string name="play_desc">再生</string>
+    <string name="skip_desc">スキップ</string>
+    <string name="great_job">お疲れ様でした！</string>
+    <string name="all_tasks_completed">すべてのタスクが完了しました。</string>
+    <string name="back_to_list">リストに戻る</string>
+    <string name="next_tasks">次のタスク</string>
+
+    <!-- Language Setup -->
+    <string name="welcome_message">言語を選択してください</string>
+    <string name="change_later_hint">この設定は後で設定画面から変更できます</string>
+    <string name="language_japanese">日本語</string>
+    <string name="language_english">English</string>
+    <string name="language_chinese">中文</string>
+    <string name="language_korean">한국어</string>
+
+    <!-- Settings -->
+    <string name="settings_title">設定</string>
+    <string name="current_language">現在の言語</string>
+    <string name="theme_setting">テーマ設定</string>
+    <string name="theme_system">システム設定</string>
+    <string name="theme_light">ライトモード</string>
+    <string name="theme_dark">ダークモード</string>
+    <string name="theme_dynamic">システムカラー</string>
+    <string name="minutes_per_task">%dm/task</string>
+    <string name="delete_desc">削除</string>
+    <string name="edit_desc">編集</string>
+
+    <!-- Empty State -->
+    <string name="no_tasks_title">タスクがありません ✨</string>
+    <string name="no_tasks_description">まずは最初のタスクグループを作って、\n時間を有効に使いましょう！</string>
+    <string name="create_first_task">最初のタスクを作成</string>
 </resources>

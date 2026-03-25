@@ -1,5 +1,14 @@
 # FitTasks 開発ログ
 
+## 2026-03-25 (テーマ設定の強化)
+- [x] テーマ設定の拡充 (ダークモード、ライトモード、システム設定のサポート)
+- [x] システムカラー (Material You Dynamic Color) の導入
+- [x] PreferenceRepository / DataStorePreferenceRepository に Dynamic Color 設定を追加
+- [x] PreferenceViewModel / PreferenceViewModelFactory の更新
+- [x] SettingsScreen にシステムカラーのトグルスイッチを追加
+- [x] MainActivity から FitTasksTheme への設定値の伝達
+- [x] 各言語の strings.xml にテーマ設定関連の文字列を追加・翻訳
+
 ## 2026-03-22 (MVP完成)
 - [x] プロジェクト構成の確認
 - [x] 現状の実装（サンプルデータ表示）の確認
@@ -15,6 +24,7 @@
 - [x] リストからの編集・削除機能の実装
 - [x] ビルドエラーの修正 (Kotlin 2.2.10 / AGP 9.1.0 環境下での KSP/Room バージョン整合性対応)
 - [x] フッターバナー広告の実装 (AdMob 初期化、Compose 連携、.env 参照)
+- [x] 多言語対応の実装 (日本語、英語、中国語、韓国語、DataStoreによる設定保存、初回起動時の設定画面)
 
 ### 次のステップ
 - [ ] タイマー実行中のバックグラウンド動作 (Foreground Service) の検討
@@ -30,6 +40,7 @@
 - [x] タスクグループの編集・削除
 - [x] バリデーション (開始時間 < 終了時間、タスクが空でないこと)
 - [x] 開発環境のビルド安定化
+- [x] 多言語対応の基盤構築 (Strings リソース、DataStore)
 
 ### フェーズ 2: UXの向上と「かわいさ」の追求 (UI/UX Polish)
 ... (以下略)
